@@ -19,6 +19,7 @@ struct InvertedTHView: View {
 
     // Indexes of the objects that have already been found.
     @State private var foundIndexes: Set<Int> = []
+    
 
     var body: some View {
         ZStack {
@@ -88,18 +89,12 @@ struct InvertedTHView: View {
                         CardView(
                             cardSize: 120,
                             imageName: item.imageName,
-                            label: item.translations["en"] ?? ""
+                            label: item.translations["en"] ?? "", isSilhouette: foundIndexes.contains(index) ? false : true
                         )
                         .overlay {
 
                             if foundIndexes.contains(index) {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(.green)
-                                    .overlay {
-                                        Image(systemName: "checkmark")
-                                            .foregroundStyle(.clear)
-                                    }
-
+                                
                             } else if currentIndex != index {
                                 RoundedRectangle(cornerRadius: 10)
                             }

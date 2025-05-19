@@ -12,6 +12,7 @@ struct CardView: View {
     var imageName: String = "telefono2"
     var label: String = "Phone"
     var cardColor: Color = .pinkBlinko
+    var isSilhouette: Bool = false
     
     var body: some View {
         // We are using dynamic sizing based on cardSize (for now)
@@ -31,6 +32,7 @@ struct CardView: View {
                 
                 // For this, we we'll always have the same size of images so it shouldn't be a problem in the future.
                 Image(imageName)
+                    .renderingMode(isSilhouette ? .template : .original) // Used to make the silhouette when needed.
                     .resizable()
                     .scaledToFit()
                     .frame(width: imageCircle*0.75)
