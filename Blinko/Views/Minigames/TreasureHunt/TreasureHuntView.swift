@@ -124,7 +124,7 @@ struct ObjectsView: View {
         .orangeBlinko, .pinkBlinko, .lilaBlinko, .purpleBlinko,
     ]
     let colorCounter: Int = 0
-    let levelObjects: [VocabularyWord] = level2.words
+    let levelObjects: [VocabularyWord] = level1.words
 
     var body: some View {
         GeometryReader { geometry in

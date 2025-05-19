@@ -33,7 +33,7 @@ struct CardView: View {
                 Image(imageName)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: imageCircle*0.65)
+                    .frame(width: imageCircle*0.75)
             }
             
             Text(label)
@@ -61,7 +61,7 @@ struct CardView: View {
 #Preview {
     HStack{
         VStack(){
-            CardView(cardSize: 120, imageName: level2.words[0].imageName, label: level2.words[0].baseWord)
+            CardView(cardSize: 120, imageName: level1.words[0].imageName, label: level1.words[0].baseWord)
         }
         Spacer()
     }.padding()

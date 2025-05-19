@@ -12,7 +12,7 @@ struct InvertedTHView: View {
     @State private var viewModel = MLViewModel()
 
     // The only data that needs to be passed to the THView is the array of 4 objects. With shuffled order.
-    let levelObjects: [VocabularyWord] = level2.words.shuffled()
+    let levelObjects: [VocabularyWord] = level1.words.shuffled()
 
     // Index of the object that needs to be found in the specific moment.
     @State private var currentIndex: Int = 0
