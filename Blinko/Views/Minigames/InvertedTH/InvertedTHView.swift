@@ -35,7 +35,7 @@ struct InvertedTHView: View {
                         .shadow(
                             color: viewModel.detectedObject.lowercased()
                                 == levelObjects[currentIndex].translations[
-                                    "it"]!
+                                    "en"]!
                                 ? .yellow : .clear, radius: 40)
                 }
             }
@@ -48,7 +48,7 @@ struct InvertedTHView: View {
                     if currentIndex < levelObjects.count,
                         viewModel.detectedObject.lowercased() == levelObjects[
                             currentIndex
-                        ].translations["it"]!
+                        ].translations["en"]!
                     {
                         foundIndexes.insert(currentIndex)
                         currentIndex += 1
