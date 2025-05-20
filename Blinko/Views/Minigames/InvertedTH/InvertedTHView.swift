@@ -19,7 +19,24 @@ struct InvertedTHView: View {
 
     // Indexes of the objects that have already been found.
     @State private var foundIndexes: Set<Int> = []
-    
+
+    // Variable used to store the last object found and display it in a big size.
+    @State private var lastObjectFound: VocabularyWord? = nil
+
+    // Control variable that displays the card whenever the user finds an object.
+    @State private var showObject: Bool = false
+
+    // Speech View Model to handle the speech-to-text feature.
+    @StateObject private var speechViewModel = TextToSpeechViewModel(
+        textToSpeechService: TextToSpeechService())
+
+    // Colors array for the cards.
+    let colors: [Color] = [
+        .orangeBlinko, .pinkBlinko, .lilaBlinko, .purpleBlinko,
+    ]
+
+    // Variable to store the color of the card of the last object discovered.
+    @State private var lastObjectColor: Color = .orangeBlinko
 
     var body: some View {
         ZStack {
@@ -28,7 +45,8 @@ struct InvertedTHView: View {
 
             VStack {
                 // If all the objects have been scanned, the scanner disappears. It starts glowing if it sees ONLY the current object.
-                if currentIndex < levelObjects.count {
+                // Also, it disappears whenever a big card is on the screen.
+                if currentIndex < levelObjects.count && !showObject {
                     Image("ScannerImage")
                         .resizable()
                         .scaledToFit()
@@ -41,71 +59,109 @@ struct InvertedTHView: View {
                 }
             }
 
-            HStack {
-                Spacer()
+            // If showObject is now true, then the cards and the camera button disappear.
+            if !showObject {
+                HStack {
+                    Spacer()
 
-                // Button to capture the object found. Disabled if the user is not finding anything.
-                Button {
-                    if currentIndex < levelObjects.count,
-                        viewModel.detectedObject.lowercased() == levelObjects[
-                            currentIndex
-                        ].translations["en"]!
-                    {
-                        foundIndexes.insert(currentIndex)
-                        currentIndex += 1
-                    }
-
-                } label: {
-                    ZStack {
-
-                        Circle()
-                            .fill(.white)
-                            .frame(width: 110)
-                            .padding(25)
-
-                        Circle()
-                            .fill(.black)
-                            .frame(width: 100)
-                            .padding(25)
-
-                        Circle()
-                            .fill(.white)
-                            .frame(width: 90)
-                            .padding(25)
-
-                    }
-                }
-
-            }
-
-            // Objects
-            HStack {
-                VStack {
-                    ForEach(0..<4, id: \.self) { index in
-
-                        let item = levelObjects[index]
-
-                        Spacer()
-                        CardView(
-                            cardSize: 120,
-                            imageName: item.imageName,
-                            label: item.translations["en"] ?? "", isSilhouette: foundIndexes.contains(index) ? false : true
-                        )
-                        .overlay {
-
-                            if foundIndexes.contains(index) {
-                                
-                            } else if currentIndex != index {
-                                RoundedRectangle(cornerRadius: 10)
+                    // Button to capture the object found. Disabled if the user is not finding anything.
+                    Button {
+                        if currentIndex < levelObjects.count,
+                            viewModel.detectedObject.lowercased()
+                                == levelObjects[
+                                    currentIndex
+                                ].translations["en"]!
+                        {
+                            lastObjectFound = levelObjects[currentIndex]
+                            lastObjectColor = colors[currentIndex]
+                            withAnimation {
+                                showObject = true
                             }
 
                         }
 
+                    } label: {
+                        ZStack {
+
+                            Circle()
+                                .fill(.white)
+                                .frame(width: 110)
+                                .padding(25)
+
+                            Circle()
+                                .fill(.black)
+                                .frame(width: 100)
+                                .padding(25)
+
+                            Circle()
+                                .fill(.white)
+                                .frame(width: 90)
+                                .padding(25)
+
+                        }
                     }
+
                 }
-                .frame(maxHeight: .infinity)
-                .padding()
-                Spacer()
+            }
+
+            // If showObject is now true, then the cards and the camera button disappear.
+            if !showObject {
+                // Objects
+                HStack {
+                    VStack {
+                        ForEach(0..<4, id: \.self) { index in
+
+                            let item = levelObjects[index]
+
+                            Spacer()
+                            CardView(
+                                cardSize: 120,
+                                imageName: item.imageName,
+                                label: item.translations["en"] ?? "",
+                                cardColor: colors[index],
+                                isSilhouette: foundIndexes.contains(index)
+                                    ? false : true
+                            )
+                            .overlay {
+
+                                if foundIndexes.contains(index) {
+
+                                } else if currentIndex != index {
+                                    RoundedRectangle(cornerRadius: 10)
+                                }
+
+                            }
+
+                        }
+                    }
+                    .frame(maxHeight: .infinity)
+                    .padding()
+                    Spacer()
+                }
+            }
+
+            
+            // If the variable showObject is true, then we show the card in a big size along with its pronunciation.
+            if showObject {
+
+                if let object = lastObjectFound {
+                    CardView(
+                        cardSize: 350,
+                        imageName: object.imageName,
+                        label: object.translations["en"] ?? "",
+                        cardColor: lastObjectColor
+                    ).onTapGesture {
+                        speechViewModel.speak(
+                            text: object.translations["en"]!,
+                            language: "English")
+                    }.onAppear {
+                        speechViewModel.speak(
+                            text: object.translations["en"]!,
+                            language: "English")
+                    }
+
+                }
+
             }
 
             if foundIndexes.count == 4 {
@@ -116,6 +172,16 @@ struct InvertedTHView: View {
             }
 
         }.ignoresSafeArea()
+            .onTapGesture {
+                
+                if showObject {
+                    withAnimation {
+                        showObject = false
+                        foundIndexes.insert(currentIndex)
+                    }
+                    currentIndex += 1
+                }
+            }
 
     }
 }

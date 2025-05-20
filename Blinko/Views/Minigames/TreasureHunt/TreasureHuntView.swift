@@ -43,7 +43,7 @@ struct TreasureHuntView: View {
                     .frame(width: 700)
                     // The image glows if the user is detecting something.
                     .shadow(
-                        color: viewModel.detectedObject != "Niente"
+                        color: viewModel.detectedObject != "none"
                             ? .yellow : .clear, radius: 40)
             }
 
@@ -52,9 +52,9 @@ struct TreasureHuntView: View {
 
                 // Button to capture the object found. Disabled if the user is not finding anything.
                 Button {
-                    if viewModel.detectedObject != "Niente" {
+                    if viewModel.detectedObject != "none" {
                             if let index = levelObjects.firstIndex(where: {
-                                $0.translations["it"]?.lowercased() == viewModel.detectedObject.lowercased()
+                                $0.translations["en"]?.lowercased() == viewModel.detectedObject.lowercased()
                             }) {
                                 detectedObject = levelObjects[index]
                                 detectedObjectIndex = index
@@ -92,7 +92,7 @@ struct TreasureHuntView: View {
                 HStack {
                     Spacer()
                     Image(
-                        viewModel.detectedObject != "Niente"
+                        viewModel.detectedObject != "none"
                             ? "blinko2" : "blinko1"
                     )
                     .resizable()
@@ -141,7 +141,7 @@ struct ObjectsView: View {
                             imageName: item.imageName,
                             label: item.translations["en"] ?? "",
                             cardColor: cardColor)
-                        .grayscale(unlockedItems.contains(item.translations["it"] ?? "") ? 0 : 1)
+                        .grayscale(unlockedItems.contains(item.translations["en"] ?? "") ? 0 : 1)
                     }
                 }
                 .frame(maxHeight: .infinity)
