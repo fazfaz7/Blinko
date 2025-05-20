@@ -11,7 +11,7 @@ import SwiftUI
 struct BlinkoApp: App {
     var body: some Scene {
         WindowGroup {
-            InvertedTHView()
+            TreasureHuntView()
         }
     }
 }

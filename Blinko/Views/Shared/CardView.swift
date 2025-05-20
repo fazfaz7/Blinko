@@ -13,6 +13,8 @@ struct CardView: View {
     var label: String = "Phone"
     var cardColor: Color = .pinkBlinko
     var isSilhouette: Bool = false
+    var grayCard: Bool = false
+    var language: String = "en"
     
     var body: some View {
         // We are using dynamic sizing based on cardSize (for now)
@@ -35,7 +37,9 @@ struct CardView: View {
                     .renderingMode(isSilhouette ? .template : .original) // Used to make the silhouette when needed.
                     .resizable()
                     .scaledToFit()
+                    .foregroundStyle(isSilhouette ? .gray : .clear)
                     .frame(width: imageCircle*0.75)
+                    .grayscale(grayCard ? 1 : 0)
             }
             
             Text(label)
@@ -57,6 +61,7 @@ struct CardView: View {
             RoundedRectangle(cornerRadius: cornerRadius)
                 .fill(cardColor)
         )
+        .grayscale(grayCard ? 1 : 0)
     }
 }
 

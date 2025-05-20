@@ -223,7 +223,7 @@ class MLModelProcessor {
         // 3. Process classification results
         if let classifications = results as? [VNClassificationObservation],
            // Find the first classification with >50% confidence
-           let bestResult = classifications.first(where: { $0.confidence > 0.8 }) {
+           let bestResult = classifications.first(where: { $0.confidence > 0.3 }) {
             // Send the identified object to our handler
             detectionHandler?(bestResult.identifier)
         }

@@ -24,7 +24,7 @@ struct InvertedTHView: View {
     @State private var lastObjectFound: VocabularyWord? = nil
 
     // Control variable that displays the card whenever the user finds an object.
-    @State private var showObject: Bool = false
+    @State private var showObjectFound: Bool = false
 
     // Speech View Model to handle the speech-to-text feature.
     @StateObject private var speechViewModel = TextToSpeechViewModel(
@@ -37,7 +37,12 @@ struct InvertedTHView: View {
 
     // Variable to store the color of the card of the last object discovered.
     @State private var lastObjectColor: Color = .orangeBlinko
-
+    
+    // Control variable that displays the card whenever the user finds an object.
+    @State private var showObject: Bool = false
+    
+    @State private var clickedObject: VocabularyWord? = nil
+    
     var body: some View {
         ZStack {
             // View of the Camera, behind everything.
@@ -46,7 +51,7 @@ struct InvertedTHView: View {
             VStack {
                 // If all the objects have been scanned, the scanner disappears. It starts glowing if it sees ONLY the current object.
                 // Also, it disappears whenever a big card is on the screen.
-                if currentIndex < levelObjects.count && !showObject {
+                if currentIndex < levelObjects.count && !showObjectFound && !showObject {
                     Image("ScannerImage")
                         .resizable()
                         .scaledToFit()
@@ -60,7 +65,7 @@ struct InvertedTHView: View {
             }
 
             // If showObject is now true, then the cards and the camera button disappear.
-            if !showObject {
+            if !showObjectFound && !showObject{
                 HStack {
                     Spacer()
 
@@ -75,7 +80,7 @@ struct InvertedTHView: View {
                             lastObjectFound = levelObjects[currentIndex]
                             lastObjectColor = colors[currentIndex]
                             withAnimation {
-                                showObject = true
+                                showObjectFound = true
                             }
 
                         }
@@ -105,7 +110,7 @@ struct InvertedTHView: View {
             }
 
             // If showObject is now true, then the cards and the camera button disappear.
-            if !showObject {
+            if !showObjectFound && !showObject {
                 // Objects
                 HStack {
                     VStack {
@@ -119,9 +124,9 @@ struct InvertedTHView: View {
                                 imageName: item.imageName,
                                 label: item.translations["en"] ?? "",
                                 cardColor: colors[index],
-                                isSilhouette: foundIndexes.contains(index)
-                                    ? false : true
+                                isSilhouette: !foundIndexes.contains(index) // Simplified logic
                             )
+                            .grayscale(foundIndexes.contains(index) ? 0 : 1)
                             .overlay {
 
                                 if foundIndexes.contains(index) {
@@ -130,6 +135,12 @@ struct InvertedTHView: View {
                                     RoundedRectangle(cornerRadius: 10)
                                 }
 
+                            }
+                            .onTapGesture {
+                                if !foundIndexes.contains(index) && index <= currentIndex {
+                                    clickedObject = item
+                                    showObject = true
+                                }
                             }
 
                         }
@@ -142,7 +153,7 @@ struct InvertedTHView: View {
 
             
             // If the variable showObject is true, then we show the card in a big size along with its pronunciation.
-            if showObject {
+            if showObjectFound {
 
                 if let object = lastObjectFound {
                     CardView(
@@ -159,9 +170,34 @@ struct InvertedTHView: View {
                             text: object.translations["en"]!,
                             language: "English")
                     }
+                    
 
                 }
 
+            }
+            
+            if showObject {
+                
+                if let object = clickedObject {
+                    CardView(
+                        cardSize: 350,
+                        imageName: object.imageName,
+                        label: object.translations["en"] ?? "",
+                        isSilhouette: true,
+                        grayCard: true
+                    ).onTapGesture {
+                        speechViewModel.speak(
+                            text: object.translations["en"]!,
+                            language: "English")
+                    }.onAppear {
+                        speechViewModel.speak(
+                            text: object.translations["en"]!,
+                            language: "English")
+                    }
+                    
+
+                }
+                
             }
 
             if foundIndexes.count == 4 {
@@ -174,13 +210,18 @@ struct InvertedTHView: View {
         }.ignoresSafeArea()
             .onTapGesture {
                 
-                if showObject {
-                    withAnimation {
-                        showObject = false
-                        foundIndexes.insert(currentIndex)
-                    }
+                
+                if showObjectFound {
+                    showObjectFound = false
+                    foundIndexes.insert(currentIndex)
                     currentIndex += 1
                 }
+                
+                if showObject {
+                    showObject = false
+                }
+                
+
             }
 
     }

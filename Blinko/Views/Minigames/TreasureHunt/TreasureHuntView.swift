@@ -23,7 +23,7 @@ struct TreasureHuntView: View {
     @State private var unlockedItems: Set<String> = []
     
     // The only data that needs to be passed to the THView is the array of 4 objects.
-    let levelObjects: [VocabularyWord] = level2.words
+    let levelObjects: [VocabularyWord] = level1.words
     
 
     var body: some View {
@@ -53,9 +53,13 @@ struct TreasureHuntView: View {
                 // Button to capture the object found. Disabled if the user is not finding anything.
                 Button {
                     if viewModel.detectedObject != "none" {
+                       
+                        
+                        print("")
                             if let index = levelObjects.firstIndex(where: {
                                 $0.translations["en"]?.lowercased() == viewModel.detectedObject.lowercased()
                             }) {
+                                print("HOLA")
                                 detectedObject = levelObjects[index]
                                 detectedObjectIndex = index
                                 unlockedItems.insert(viewModel.detectedObject.lowercased())
@@ -139,9 +143,10 @@ struct ObjectsView: View {
                         CardView(
                             cardSize: geometry.size.width * 0.1,
                             imageName: item.imageName,
-                            label: item.translations["en"] ?? "",
+                            label: item.translations[unlockedItems.contains(item.translations["en"] ?? "") ? "en" : "it"] ?? "" ,
                             cardColor: cardColor)
                         .grayscale(unlockedItems.contains(item.translations["en"] ?? "") ? 0 : 1)
+                        
                     }
                 }
                 .frame(maxHeight: .infinity)
