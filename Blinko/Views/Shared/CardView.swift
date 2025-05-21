@@ -38,7 +38,7 @@ struct CardView: View {
             
             Text(label)
                 .fontWeight(.heavy)
-                .font(.system(size: labelFont))
+                .font(.custom("Baloo2-Bold", size: labelFont))
                 .frame(width: labelWidth)
                 .fixedSize(horizontal: false, vertical: true) // Allow the text to wrap
                 .minimumScaleFactor(0.5) // Allow text to shrink if needed

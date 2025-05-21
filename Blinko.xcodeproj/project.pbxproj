@@ -10,9 +10,22 @@
 		628532122DD782C800C73725 /* Blinko.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blinko.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		29B59BD12DDC798900CE5011 /* Exceptions for "Blinko" folder in "Blinko" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 628532112DD782C800C73725 /* Blinko */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		628532142DD782C800C73725 /* Blinko */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				29B59BD12DDC798900CE5011 /* Exceptions for "Blinko" folder in "Blinko" target */,
+			);
 			path = Blinko;
 			sourceTree = "<group>";
 		};
@@ -255,6 +268,7 @@
 				DEVELOPMENT_TEAM = 2TX9W9SS3U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Blinko/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Blinko;
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to the camera to be able to detect every day objects";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -290,6 +304,7 @@
 				DEVELOPMENT_TEAM = 2TX9W9SS3U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Blinko/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Blinko;
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to the camera to be able to detect every day objects";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

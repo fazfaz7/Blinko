@@ -1,68 +1,114 @@
 import SwiftUI
 import AVFoundation
 
+struct Shake: GeometryEffect {
+    var amount: CGFloat = 10
+    var shakesPerUnit: CGFloat = 3
+    var animatableData: CGFloat
+
+    func effectValue(size: CGSize) -> ProjectionTransform {
+        let translation = amount * sin(animatableData * .pi * shakesPerUnit)
+        return ProjectionTransform(CGAffineTransform(translationX: translation, y: 0))
+    }
+}
+
 struct ImageMatchingView: View {
     let words: [VocabularyWord]
+    let colors: [Color] = [.orangeBlinko, .pinkBlinko, .lilaBlinko, .purpleBlinko]
+    
+    @State private var remainingWords: [VocabularyWord]
+    @State private var targetWord: VocabularyWord?
+    @State private var wrongTapTriggers: [UUID: CGFloat] = [:]
+    @State private var colorMap: [UUID: Color] = [:]
+    
+    init(words: [VocabularyWord]) {
+        self.words = words
+        _remainingWords = State(initialValue: words)
 
-    @State private var targetWord: VocabularyWord? = nil
-    @State private var feedback: String = ""
-
+        var map: [UUID: Color] = [:]
+        for (index, word) in words.enumerated() {
+            let color = colors[index % colors.count]
+            map[word.id] = color
+        }
+        _colorMap = State(initialValue: map)
+    }
+    
     var body: some View {
-        VStack(spacing: 40) {
+        VStack(spacing: 30) {
             Spacer()
+            
             HStack(spacing: 30) {
-                ForEach(words) { word in
-                    CardView(cardSize: 200, imageName: word.imageName, label: word.baseWord)
+                ForEach(remainingWords, id: \.id) { word in
+                    let color = colorMap[word.id] ?? .gray
+                    CardView(cardSize: 240, imageName: word.imageName, label: word.baseWord, cardColor: color)
+                        .modifier(Shake(animatableData: wrongTapTriggers[word.id, default: 0]))
                         .onTapGesture {
+                            speak(word: word.baseWord)
                             checkAnswer(selected: word)
                         }
                 }
+
             }
-            .frame(maxWidth: .infinity)
             .padding(.horizontal)
-
+            
             if let word = targetWord {
-                VStack(spacing: 20) {
-                    Text(word.baseWord)
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .foregroundColor(.primary)
-
-                    Button("🔊 Listen Again") {
-                        speak(word: word.baseWord)
+                Button(action: {
+                    speak(word: word.baseWord)
+                }) {
+                    HStack(spacing: 8) {
+                        Text(word.baseWord)
+                            .font(.custom("Baloo2-Bold", size: 70))
+                        Image(systemName: "speaker.wave.2.fill")
                     }
-                    .buttonStyle(.borderedProminent)
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 12)
+                    .background(Color.white)
+                    .foregroundColor(.tealBlinko)
+                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                    .shadow(radius: 2)
                 }
+                
             }
-
-            if !feedback.isEmpty {
-                Text(feedback)
-                    .font(.headline)
-                    .foregroundColor(feedback == "Correct!" ? .green : .red)
-            }
-
+            
             Spacer()
         }
+        .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.purpleBlinko)
+        .background(Color.tealBlinko)
         .ignoresSafeArea()
         .onAppear {
             pickNewTarget()
         }
     }
-
+    
     func pickNewTarget() {
-        targetWord = words.randomElement()
-        feedback = ""
-        if let word = targetWord {
-            speak(word: word.baseWord)
+        if !remainingWords.isEmpty {
+            targetWord = remainingWords.randomElement()
+            if let word = targetWord {
+                speak(word: word.baseWord)
+            }
+        } else {
+            targetWord = nil
+        }
+    }
+    
+    func checkAnswer(selected: VocabularyWord) {
+        if selected == targetWord {
+            withAnimation{
+                remainingWords.removeAll { $0 == selected }
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                pickNewTarget()
+            }
+        } else {
+            // Trigger shake animation for the tapped card
+            withAnimation {
+                wrongTapTriggers[selected.id, default: 0] += 1
+            }
         }
     }
 
-    func checkAnswer(selected: VocabularyWord) {
-        feedback = (selected == targetWord) ? "Correct!" : "Try again!"
-    }
-
+    
     func speak(word: String) {
         let utterance = AVSpeechUtterance(string: word)
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
@@ -70,10 +116,6 @@ struct ImageMatchingView: View {
     }
 }
 
-
-
 #Preview {
-        let sampleWords = level1.words
-    
-    ImageMatchingView(words: sampleWords)
+    ImageMatchingView(words: level1.words)
 }
