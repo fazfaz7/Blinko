@@ -10,7 +10,7 @@ import SwiftUI
 struct CardView: View {
     var cardSize: CGFloat = 350
     var imageName: String = "telefono2"
-    var withLabel: Bool = false
+    var withLabel: Bool = true
     var label: String = "Phone"
     var cardColor: Color = .pinkBlinko
     var isSilhouette: Bool = false

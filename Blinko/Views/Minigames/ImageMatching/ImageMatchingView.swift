@@ -23,9 +23,12 @@ struct ImageMatchingView: View {
     @State private var showMascotJump = false
     @State private var mascotOffset: CGFloat = 0
     @State private var isJumping = false
+    // Closure used to go to the next minigame. (Image Matching)
+    var onNext: () -> Void
+    
 
     
-    init(words: [VocabularyWord]) {
+    init(words: [VocabularyWord], onNext: @escaping () -> Void) {
         self.words = words
         _remainingWords = State(initialValue: words)
 
@@ -35,6 +38,7 @@ struct ImageMatchingView: View {
             map[word.id] = color
         }
         _colorMap = State(initialValue: map)
+        self.onNext = onNext
     }
     
     var body: some View {
@@ -76,15 +80,26 @@ struct ImageMatchingView: View {
             }
             
             if(showMascotJump){
-                withAnimation{
+                
                     Image("blinko2")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 200, height: 200)
                         .offset(y: mascotOffset)
                         .onAppear {
-                            startJumping()
+                            withAnimation {
+                                startJumping()
+                            }
                         }
+                    
+                    Button {
+                        onNext()
+                    } label: {
+                        Text("Next Game")
+                            .padding()
+                            .foregroundStyle(.white)
+                            .background(RoundedRectangle(cornerRadius: 10).fill(.blue))
+                    
                 }
             }
             
@@ -164,5 +179,5 @@ struct ImageMatchingView: View {
 }
 
 #Preview {
-    ImageMatchingView(words: level1.words)
+   // ImageMatchingView(words: level1.words)
 }

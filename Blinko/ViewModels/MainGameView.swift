@@ -24,7 +24,7 @@ struct MainGameView: View {
             case .treasureHunt:
                 TreasureHuntView(onNext: { currentStage = .memoryGame })
             case .memoryGame:
-                TestView(onNext: { currentStage = .invertedTH })
+                ImageMatchingView(words: level1.words, onNext: { currentStage = .invertedTH })
             case .invertedTH:
                 InvertedTHView(onNext: {currentStage = .treasureHunt})
             }
