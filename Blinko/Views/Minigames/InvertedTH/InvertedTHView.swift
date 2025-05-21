@@ -43,6 +43,8 @@ struct InvertedTHView: View {
     
     @State private var clickedObject: VocabularyWord? = nil
     
+    var onNext: () -> Void
+    
     var body: some View {
         ZStack {
             // View of the Camera, behind everything.
@@ -201,11 +203,21 @@ struct InvertedTHView: View {
             }
 
             if foundIndexes.count == 4 {
-                Image("GoodJob")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 800)
+                VStack {
+                    Image("GoodJob")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 800)
+                    
+                    Button {
+                        onNext()
+                    } label: {
+                        Text("Change!")
+                    }
+                }
+                 
             }
+            
 
         }.ignoresSafeArea()
             .onTapGesture {
@@ -223,10 +235,13 @@ struct InvertedTHView: View {
                 
 
             }
+            .onDisappear {
+                viewModel.cameraManager.stopSession()
+                    }
 
     }
 }
 
 #Preview {
-    InvertedTHView()
+    //InvertedTHView(onNext: { currentStage = .memoryGame)
 }

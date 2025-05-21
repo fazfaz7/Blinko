@@ -247,3 +247,20 @@ class MLModelProcessor {
         }
     }
 }
+
+
+extension CameraManager {
+    func stopSession() {
+        sessionQueue.async { [weak self] in
+            self?.captureSession.stopRunning()
+        }
+    }
+
+    func startSessionIfNeeded() {
+        sessionQueue.async { [weak self] in
+            if let isRunning = self?.captureSession.isRunning, !isRunning {
+                self?.captureSession.startRunning()
+            }
+        }
+    }
+}

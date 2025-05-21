@@ -15,7 +15,9 @@ import Vision
 @Observable
 class MLViewModel {
     var currentFrame: CGImage?
-    private let cameraManager = CameraManager()
+    
+    // Camera Manager Object
+    let cameraManager = CameraManager()
     
     // String containing the currently detected object
     var detectedObject: String = "No object detected"
