@@ -20,6 +20,10 @@ struct ImageMatchingView: View {
     @State private var targetWord: VocabularyWord?
     @State private var wrongTapTriggers: [UUID: CGFloat] = [:]
     @State private var colorMap: [UUID: Color] = [:]
+    @State private var showMascotJump = false
+    @State private var mascotOffset: CGFloat = 0
+    @State private var isJumping = false
+
     
     init(words: [VocabularyWord]) {
         self.words = words
@@ -40,7 +44,7 @@ struct ImageMatchingView: View {
             HStack(spacing: 30) {
                 ForEach(remainingWords, id: \.id) { word in
                     let color = colorMap[word.id] ?? .gray
-                    CardView(cardSize: 240, imageName: word.imageName, label: word.baseWord, cardColor: color)
+                    CardView(cardSize: 240, imageName: word.imageName, withLabel: true, label: word.baseWord, cardColor: color)
                         .modifier(Shake(animatableData: wrongTapTriggers[word.id, default: 0]))
                         .onTapGesture {
                             speak(word: word.baseWord)
@@ -56,9 +60,10 @@ struct ImageMatchingView: View {
                     speak(word: word.baseWord)
                 }) {
                     HStack(spacing: 8) {
-                        Text(word.baseWord)
-                            .font(.custom("Baloo2-Bold", size: 70))
+                        //Text(word.baseWord)
+                        //    .font(.custom("Baloo2-Bold", size: 70))
                         Image(systemName: "speaker.wave.2.fill")
+                            .font(.system(size: 90))
                     }
                     .padding(.horizontal, 24)
                     .padding(.vertical, 12)
@@ -68,6 +73,19 @@ struct ImageMatchingView: View {
                     .shadow(radius: 2)
                 }
                 
+            }
+            
+            if(showMascotJump){
+                withAnimation{
+                    Image("blinko2")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 200, height: 200)
+                        .offset(y: mascotOffset)
+                        .onAppear {
+                            startJumping()
+                        }
+                }
             }
             
             Spacer()
@@ -97,6 +115,11 @@ struct ImageMatchingView: View {
             withAnimation{
                 remainingWords.removeAll { $0 == selected }
             }
+            if remainingWords.isEmpty {
+                pickNewTarget()
+                showMascotJump = true
+            }
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 pickNewTarget()
             }
@@ -104,6 +127,30 @@ struct ImageMatchingView: View {
             // Trigger shake animation for the tapped card
             withAnimation {
                 wrongTapTriggers[selected.id, default: 0] += 1
+            }
+        }
+    }
+
+    func startJumping() {
+        guard !isJumping else { return }
+        isJumping = true
+        
+        Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { timer in
+            withAnimation(.interpolatingSpring(stiffness: 150, damping: 5)) {
+                mascotOffset = -30
+            }
+            
+            // Return to original position
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    mascotOffset = 0
+                }
+            }
+            
+            // Stop after some time (optional)
+            if !showMascotJump {
+                timer.invalidate()
+                isJumping = false
             }
         }
     }

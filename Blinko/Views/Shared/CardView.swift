@@ -10,6 +10,7 @@ import SwiftUI
 struct CardView: View {
     var cardSize: CGFloat = 350
     var imageName: String = "telefono2"
+    var withLabel: Bool = false
     var label: String = "Phone"
     var cardColor: Color = .pinkBlinko
     
@@ -35,20 +36,21 @@ struct CardView: View {
                     .scaledToFit()
                     .frame(width: imageCircle*0.75)
             }
-            
-            Text(label)
-                .fontWeight(.heavy)
-                .font(.custom("Baloo2-Bold", size: labelFont))
-                .frame(width: labelWidth)
-                .fixedSize(horizontal: false, vertical: true) // Allow the text to wrap
-                .minimumScaleFactor(0.5) // Allow text to shrink if needed
-                .multilineTextAlignment(.center)
-                .padding(8)
-                .background(
-                    RoundedRectangle(cornerRadius: cornerRadius)
-                        .fill(.white)
-                )
-                .foregroundStyle(.tealBlinko)
+            if(withLabel){
+                Text(label)
+                    .fontWeight(.heavy)
+                    .font(.custom("Baloo2-Bold", size: labelFont))
+                    .frame(width: labelWidth)
+                    .fixedSize(horizontal: false, vertical: true) // Allow the text to wrap
+                    .minimumScaleFactor(0.5) // Allow text to shrink if needed
+                    .multilineTextAlignment(.center)
+                    .padding(8)
+                    .background(
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .fill(.white)
+                    )
+                    .foregroundStyle(.tealBlinko)
+            }
         }
         .frame(width: cardSize, height: cardSize * 1.43) // 500/350
         .background(
