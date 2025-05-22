@@ -23,6 +23,8 @@ struct ImageMatchingView: View {
     @State private var showMascotJump = false
     @State private var mascotOffset: CGFloat = 0
     @State private var isJumping = false
+    @StateObject private var TextToSpeachViewModel = TextToSpeechViewModel(
+        textToSpeechService: TextToSpeechService())
 
     
     init(words: [VocabularyWord]) {
@@ -47,7 +49,7 @@ struct ImageMatchingView: View {
                     CardView(cardSize: 240, imageName: word.imageName, withLabel: true, label: word.baseWord, cardColor: color)
                         .modifier(Shake(animatableData: wrongTapTriggers[word.id, default: 0]))
                         .onTapGesture {
-                            speak(word: word.baseWord)
+                            TextToSpeachViewModel.speak(text: word.baseWord, language: "English")
                             checkAnswer(selected: word)
                         }
                 }
@@ -57,7 +59,7 @@ struct ImageMatchingView: View {
             
             if let word = targetWord {
                 Button(action: {
-                    speak(word: word.baseWord)
+                    TextToSpeachViewModel.speak(text: word.baseWord, language: "English")
                 }) {
                     HStack(spacing: 8) {
                         //Text(word.baseWord)
@@ -103,8 +105,7 @@ struct ImageMatchingView: View {
         if !remainingWords.isEmpty {
             targetWord = remainingWords.randomElement()
             if let word = targetWord {
-                speak(word: word.baseWord)
-            }
+                TextToSpeachViewModel.speak(text: word.baseWord, language: "English")            }
         } else {
             targetWord = nil
         }
@@ -155,12 +156,6 @@ struct ImageMatchingView: View {
         }
     }
 
-    
-    func speak(word: String) {
-        let utterance = AVSpeechUtterance(string: word)
-        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-        AVSpeechSynthesizer().speak(utterance)
-    }
 }
 
 #Preview {
