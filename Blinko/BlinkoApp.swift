@@ -11,7 +11,7 @@ import SwiftUI
 struct BlinkoApp: App {
     var body: some Scene {
         WindowGroup {
-            ImageMatchingView(words: level1.words)
+            MainGameView()
         }
     }
 }

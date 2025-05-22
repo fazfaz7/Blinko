@@ -10,9 +10,12 @@ import SwiftUI
 struct CardView: View {
     var cardSize: CGFloat = 350
     var imageName: String = "telefono2"
-    var withLabel: Bool = false
+    var withLabel: Bool = true
     var label: String = "Phone"
     var cardColor: Color = .pinkBlinko
+    var isSilhouette: Bool = false
+    var grayCard: Bool = false
+    var language: String = "en"
     
     var body: some View {
         // We are using dynamic sizing based on cardSize (for now)
@@ -32,9 +35,12 @@ struct CardView: View {
                 
                 // For this, we we'll always have the same size of images so it shouldn't be a problem in the future.
                 Image(imageName)
+                    .renderingMode(isSilhouette ? .template : .original) // Used to make the silhouette when needed.
                     .resizable()
                     .scaledToFit()
+                    .foregroundStyle(isSilhouette ? .gray : .clear)
                     .frame(width: imageCircle*0.75)
+                    .grayscale(grayCard ? 1 : 0)
             }
             if(withLabel){
                 Text(label)
@@ -57,6 +63,7 @@ struct CardView: View {
             RoundedRectangle(cornerRadius: cornerRadius)
                 .fill(cardColor)
         )
+        .grayscale(grayCard ? 1 : 0)
     }
 }
 

@@ -223,7 +223,7 @@ class MLModelProcessor {
         // 3. Process classification results
         if let classifications = results as? [VNClassificationObservation],
            // Find the first classification with >50% confidence
-           let bestResult = classifications.first(where: { $0.confidence > 0.8 }) {
+           let bestResult = classifications.first(where: { $0.confidence > 0.3 }) {
             // Send the identified object to our handler
             detectionHandler?(bestResult.identifier)
         }
@@ -244,6 +244,23 @@ class MLModelProcessor {
         } catch {
             // Handle processing errors
             print("Failed to perform classification: \(error.localizedDescription)")
+        }
+    }
+}
+
+
+extension CameraManager {
+    func stopSession() {
+        sessionQueue.async { [weak self] in
+            self?.captureSession.stopRunning()
+        }
+    }
+
+    func startSessionIfNeeded() {
+        sessionQueue.async { [weak self] in
+            if let isRunning = self?.captureSession.isRunning, !isRunning {
+                self?.captureSession.startRunning()
+            }
         }
     }
 }
