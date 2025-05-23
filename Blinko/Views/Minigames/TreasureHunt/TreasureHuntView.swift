@@ -22,9 +22,6 @@ struct TreasureHuntView: View {
     // Set of the objects that have already been unlocked.
     @State private var unlockedItems: Set<String> = []
 
-    // The only data that needs to be passed to the THView is the array of 4 objects.
-    let levelObjects: [VocabularyWord] = level1.words
-
     // Colors for the cards
     let colors: [Color] = [
         .orangeBlinko, .pinkBlinko, .lilaBlinko, .purpleBlinko,
@@ -44,8 +41,14 @@ struct TreasureHuntView: View {
     @StateObject private var speechViewModel = TextToSpeechViewModel(
         textToSpeechService: TextToSpeechService())
 
+    // Current level
+    var level: Level = level1
+   
+    @ObservedObject var userProgress: UserProgress
+    
     // Closure used to go to the next minigame. (Image Matching)
     var onNext: () -> Void
+    
 
     var body: some View {
         GeometryReader { geometry in
@@ -62,7 +65,7 @@ struct TreasureHuntView: View {
                         HStack {
                             ForEach(0..<4, id: \.self) { index in
                                 
-                                let item = levelObjects[index]
+                                let item = level.words[index]
                                 let cardColor = colors[index]
                                 
                                 
@@ -81,6 +84,8 @@ struct TreasureHuntView: View {
                             }
                         }.padding()
                         Button {
+                            viewModel.cameraManager.stopSession()
+                            userProgress.markStageCompleted(.treasureHunt, for: level)
                             onNext()
                         } label: {
                             Text("Next Game")
@@ -97,7 +102,7 @@ struct TreasureHuntView: View {
                         VStack {
                             ForEach(0..<4, id: \.self) { index in
 
-                                let item = levelObjects[index]
+                                let item = level.words[index]
                                 let cardColor = colors[index]
 
                                 Spacer()
@@ -148,12 +153,11 @@ struct TreasureHuntView: View {
                         Button {
                             if viewModel.detectedObject != "none" {
 
-                                if let index = levelObjects.firstIndex(where: {
+                                if let index = level.words.firstIndex(where: {
                                     $0.translations["en"]?.lowercased()
                                         == viewModel.detectedObject.lowercased()
                                 }) {
-                                    print("HOLA")
-                                    detectedObject = levelObjects[index]
+                                    detectedObject = level.words[index]
                                     detectedObjectIndex = index
                                     
                                     withAnimation {
@@ -262,7 +266,7 @@ struct TreasureHuntView: View {
                 
                 
                 if unlockedItems.count == 4 && showObjectFound != true {
-   
+                    
                 }
                  
 

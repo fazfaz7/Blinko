@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct BlinkoApp: App {
+    
+    @StateObject var userProgress = UserProgress()
     var body: some Scene {
         WindowGroup {
-            MainGameView()
+            SelectLevel(userProgress: userProgress)
         }
     }
 }

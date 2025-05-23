@@ -13,7 +13,7 @@ struct Shake: GeometryEffect {
 }
 
 struct ImageMatchingView: View {
-    let words: [VocabularyWord]
+    let level: Level
     let colors: [Color] = [.orangeBlinko, .pinkBlinko, .lilaBlinko, .purpleBlinko]
     
     @State private var remainingWords: [VocabularyWord]
@@ -26,21 +26,26 @@ struct ImageMatchingView: View {
     @StateObject private var TextToSpeachViewModel = TextToSpeechViewModel(
         textToSpeechService: TextToSpeechService())
     // Closure used to go to the next minigame. (Image Matching)
+    
+    @ObservedObject var userProgress: UserProgress
     var onNext: () -> Void
     
 
     
-    init(words: [VocabularyWord], onNext: @escaping () -> Void) {
-        self.words = words
-        _remainingWords = State(initialValue: words)
+    init(level: Level,  userProgress: UserProgress, onNext: @escaping () -> Void) {
+        self.level = level
+        _remainingWords = State(initialValue: level.words)
 
         var map: [UUID: Color] = [:]
-        for (index, word) in words.enumerated() {
+        for (index, word) in level.words.enumerated() {
             let color = colors[index % colors.count]
             map[word.id] = color
         }
         _colorMap = State(initialValue: map)
+       
+       self.userProgress = userProgress
         self.onNext = onNext
+        
     }
     
     var body: some View {
@@ -95,6 +100,7 @@ struct ImageMatchingView: View {
                         }
                     
                     Button {
+                        userProgress.markStageCompleted(.memoryGame, for: level)
                         onNext()
                     } label: {
                         Text("Next Game")
@@ -174,5 +180,5 @@ struct ImageMatchingView: View {
 }
 
 #Preview {
-   // ImageMatchingView(words: level1.words)
+    ImageMatchingView(level: level1, userProgress: UserProgress(), onNext: {})
 }
