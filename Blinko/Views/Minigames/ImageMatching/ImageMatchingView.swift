@@ -1,72 +1,31 @@
 import SwiftUI
 import AVFoundation
 
-enum MascotMood {
-    case normal
-    case wow
-    case happy
-    case angry
-
-    var imageName: String {
-        switch self {
-        case .normal: return "normal_blinko"
-        case .wow: return "wow_blinko"
-        case .happy: return "happy_blinko"
-        case .angry: return "angry_blinko"
-        }
-    }
-}
-
-struct Shake: GeometryEffect {
-    var amount: CGFloat = 10
-    var shakesPerUnit: CGFloat = 3
-    var animatableData: CGFloat
-
-    func effectValue(size: CGSize) -> ProjectionTransform {
-        let translation = amount * sin(animatableData * .pi * shakesPerUnit)
-        return ProjectionTransform(CGAffineTransform(translationX: translation, y: 0))
-    }
-}
-
 struct ImageMatchingView: View {
     let level: Level
     let colors: [Color] = [.orangeBlinko, .pinkBlinko, .lilaBlinko, .purpleBlinko]
     
-    // Track the remaining words still in the game
+    // Track the remaining words in the game
     @State private var remainingWords: [VocabularyWord]
-    
     // The word the user has to tap
     @State private var targetWord: VocabularyWord?
-    
     // Used by the shake animation
     @State private var wrongTapTriggers: [UUID: CGFloat] = [:]
-    
     // Map the colors to the index, so they don't shift
     @State private var colorMap: [UUID: Color] = [:]
-    
-    // Show Blinko animation after the complete level
+    // Track the status of the game
     @State private var isGameFinished = false
-    
-    // Useful for Blinko jumping
-    @State private var mascotOffset: CGFloat = 0
-    @State private var isJumping = false
-    
     // Overlay of the card when it is correctly selected
     @State private var correctWordOverlay: VocabularyWord?
-    
     // Track mascot mood changes
     @State private var mascotMood: MascotMood = .normal
-    
     // TextToSpeech viewModel to prompt words
     @StateObject private var SpeechViewModel = TextToSpeechViewModel(
         textToSpeechService: TextToSpeechService())
-    
     // Closure used to go to the next minigame. (Image Matching)
     @ObservedObject var userProgress: UserProgress
     var onNext: () -> Void
-    
 
-    
     init(level: Level,  userProgress: UserProgress, onNext: @escaping () -> Void) {
         self.level = level
         _remainingWords = State(initialValue: level.words)
@@ -109,8 +68,8 @@ struct ImageMatchingView: View {
                         let color = colorMap[word.id] ?? .gray
                         CardView(cardSize: 240, imageName: word.imageName, withLabel: true, label: word.baseWord, cardColor: color)
                             .modifier(Shake(animatableData: wrongTapTriggers[word.id, default: 0]))
+                        // Every time user tap a card it will trigger audio and check if it's the right card
                             .onTapGesture {
-                                // Every time user tap a card it will trigger audio and check if it's the right card
                                 guard correctWordOverlay == nil else { return }
                                 SpeechViewModel.speak(text: word.baseWord, language: "English")
                                 checkAnswer(selected: word)
@@ -143,16 +102,12 @@ struct ImageMatchingView: View {
              
                 Spacer()
             }
-            // Mascot
-                VStack{
+            VStack {
+                Spacer()
+                HStack {
                     Spacer()
-                    HStack {
-                        Spacer()
-                        Image(mascotMood.imageName)
-                            .resizable()
-                            .frame(width: 300, height: 300)
-                            .offset(y: mascotOffset)
-                    }
+                    MascotView(mood: mascotMood)
+                }
             }
             .ignoresSafeArea()
             }
@@ -215,9 +170,7 @@ struct ImageMatchingView: View {
                 }
                 if remainingWords.isEmpty {
                     isGameFinished = true
-                    mascotMood = .happy
-                    startJumping()
-                    
+                    mascotMood = .happy                    
                 } else {
                     pickNewTarget()
                 }
@@ -236,32 +189,19 @@ struct ImageMatchingView: View {
             }
         }
     }
-
-    // Makes the mascot jump
-    func startJumping() {
-        guard !isJumping else { return }
-        isJumping = true
-
-        Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { timer in
-            withAnimation(.interpolatingSpring(stiffness: 150, damping: 5)) {
-                mascotOffset = -30
-            }
-
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    mascotOffset = 0
-                }
-            }
-
-            // Stop jumping if game is reset or mood changes
-            if !isGameFinished || mascotMood != .happy {
-                timer.invalidate()
-                isJumping = false
-            }
-        }
-    }
-
 }
+
+struct Shake: GeometryEffect {
+    var amount: CGFloat = 10
+    var shakesPerUnit: CGFloat = 3
+    var animatableData: CGFloat
+
+    func effectValue(size: CGSize) -> ProjectionTransform {
+        let translation = amount * sin(animatableData * .pi * shakesPerUnit)
+        return ProjectionTransform(CGAffineTransform(translationX: translation, y: 0))
+    }
+}
+
 
 #Preview {
     ImageMatchingView(level: level1, userProgress: UserProgress(), onNext: {})
