@@ -123,7 +123,7 @@ struct ImageMatchingView: View {
                 Spacer()
                 HStack {
                     Spacer()
-                    MascotView(mood: mascotMood)
+                        MascotView(mood: mascotMood)
                 }
             }
             .ignoresSafeArea()
