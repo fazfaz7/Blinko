@@ -7,21 +7,29 @@ struct ImageMatchingView: View {
     
     // Track the remaining words in the game
     @State private var remainingWords: [VocabularyWord]
+    
     // The word the user has to tap
     @State private var targetWord: VocabularyWord?
+    
     // Used by the shake animation
     @State private var wrongTapTriggers: [UUID: CGFloat] = [:]
+    
     // Map the colors to the index, so they don't shift
     @State private var colorMap: [UUID: Color] = [:]
+    
     // Track the status of the game
     @State private var isGameFinished = false
+    
     // Overlay of the card when it is correctly selected
     @State private var correctWordOverlay: VocabularyWord?
+    
     // Track mascot mood changes
     @State private var mascotMood: MascotMood = .normal
+    
     // TextToSpeech viewModel to prompt words
     @StateObject private var SpeechViewModel = TextToSpeechViewModel(
         textToSpeechService: TextToSpeechService())
+    
     // Closure used to go to the next minigame. (Image Matching)
     @ObservedObject var userProgress: UserProgress
     var onNext: () -> Void
