@@ -1,0 +1,50 @@
+//
+//  SelectLevel.swift
+//  Blinko
+//
+//  Created by Adrian Emmanuel Faz Mercado on 22/05/25.
+//
+
+import SwiftUI
+
+struct SelectLevel: View {
+    let levels: [Level] = [level1, level2, level3]
+    @ObservedObject var userProgress: UserProgress
+    @State private var selectedLevel: Level? = nil
+
+    var body: some View {
+        NavigationStack {
+            HStack {
+                ForEach(Array(levels.enumerated()), id: \.element.id) { idx, level in
+                    let isUnlocked = userProgress.isLevelUnlocked(levelIndex: idx, levels: levels)
+                    
+                    Button {
+                        if isUnlocked {
+                            selectedLevel = level
+                        }
+                    } label: {
+                        Text("LEVEL \(idx + 1)")
+                            .foregroundStyle(isUnlocked ? .green : .red)
+                            .padding()
+                            .background(RoundedRectangle(cornerRadius: 8).stroke(isUnlocked ? Color.green : Color.red, lineWidth: 2))
+                    }
+                    .disabled(!isUnlocked)
+                }
+            }
+            .padding()
+        }
+        .fullScreenCover(item: $selectedLevel) { level in
+            MinigameContainerView(
+                level: level,
+                userProgress: userProgress
+            ) {
+                selectedLevel = nil
+            }
+        }
+    }
+}
+
+
+#Preview {
+    SelectLevel(userProgress: UserProgress())
+}

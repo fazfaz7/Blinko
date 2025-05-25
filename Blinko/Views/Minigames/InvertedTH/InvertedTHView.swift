@@ -12,8 +12,11 @@ struct InvertedTHView: View {
     @State private var viewModel = MLViewModel()
 
     // The only data that needs to be passed to the THView is the array of 4 objects. With shuffled order.
-    let levelObjects: [VocabularyWord] = level1.words.shuffled()
+    var levelObjects: [VocabularyWord]
 
+    // Current level
+    let level: Level
+    
     // Index of the object that needs to be found in the specific moment.
     @State private var currentIndex: Int = 0
 
@@ -43,7 +46,18 @@ struct InvertedTHView: View {
     
     @State private var clickedObject: VocabularyWord? = nil
     
+   
+    
+    @ObservedObject var userProgress: UserProgress
+    
     var onNext: () -> Void
+    
+    init(level: Level, userProgress: UserProgress, onNext: @escaping () -> Void ) {
+        self.level = level
+        self.levelObjects = level.words.shuffled()
+        self.userProgress = userProgress
+        self.onNext = onNext
+    }
     
     var body: some View {
         ZStack {
@@ -210,9 +224,11 @@ struct InvertedTHView: View {
                         .frame(width: 800)
                     
                     Button {
+                        userProgress.markStageCompleted(.invertedTH, for: level)
                         onNext()
                     } label: {
                         Text("Change!")
+                        
                     }
                 }
                  
@@ -221,7 +237,6 @@ struct InvertedTHView: View {
 
         }.ignoresSafeArea()
             .onTapGesture {
-                
                 
                 if showObjectFound {
                     showObjectFound = false
