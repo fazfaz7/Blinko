@@ -26,6 +26,8 @@ struct ImageMatchingView: View {
     // Track mascot mood changes
     @State private var mascotMood: MascotMood = .normal
     
+    @State private var showConfetti = false
+    
     // TextToSpeech viewModel to prompt words
     @StateObject private var SpeechViewModel = TextToSpeechViewModel(
         textToSpeechService: TextToSpeechService())
@@ -52,6 +54,13 @@ struct ImageMatchingView: View {
     
     var body: some View {
         ZStack {
+            if showConfetti {
+                LottieView(filename: "confetti", loopMode: .loop)
+                    .frame(width: 800, height: 800)
+                    .allowsHitTesting(false)
+                    .transition(.scale)
+            }
+            
             VStack(spacing: 30) {
                 Spacer()
                 
@@ -170,7 +179,7 @@ struct ImageMatchingView: View {
             mascotMood = .wow  // Quick positive feedback
             correctWordOverlay = selected
 
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                 withAnimation {
                     remainingWords.removeAll { $0 == selected }
                     correctWordOverlay = nil
@@ -178,7 +187,8 @@ struct ImageMatchingView: View {
                 }
                 if remainingWords.isEmpty {
                     isGameFinished = true
-                    mascotMood = .happy                    
+                    mascotMood = .happy
+                    showConfetti = true
                 } else {
                     pickNewTarget()
                 }
@@ -209,7 +219,6 @@ struct Shake: GeometryEffect {
         return ProjectionTransform(CGAffineTransform(translationX: translation, y: 0))
     }
 }
-
 
 #Preview {
     ImageMatchingView(level: level1, userProgress: UserProgress(), onNext: {})
