@@ -215,6 +215,23 @@ struct InvertedTHView: View {
                 }
                 
             }
+            
+            if currentIndex < levelObjects.count && !showObjectFound && !showObject {
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        Image(
+                            viewModel.detectedObject.lowercased()
+                            == levelObjects[currentIndex].translations[
+                                "en"]!
+                            ? "happy_blinko" : "normal_blinko"
+                        )
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 350)
+                    }
+                }}
 
             if foundIndexes.count == 4 {
                 VStack {

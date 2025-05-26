@@ -198,12 +198,11 @@ struct TreasureHuntView: View {
                             Spacer()
                             Image(
                                 viewModel.detectedObject != "none"
-                                    ? "blinko2" : "blinko1"
+                                    ? "happy_blinko" : "normal_blinko"
                             )
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 200)
-                            .padding(20)
+                            .frame(width: 350)
                         }
                     }
                 }
