@@ -102,10 +102,10 @@ struct ImageMatchingView: View {
                         SpeechViewModel.speak(text: word.baseWord, language: "English")
                     }) {
                         HStack(spacing: 8) {
+                            Image(systemName: "speaker.wave.2.fill")
+                                .font(.system(size: 60))
                             Text(word.baseWord)
                                 .font(.custom("Baloo2-Bold", size: 70))
-                            Image(systemName: "speaker.wave.2.fill")
-                                .font(.system(size: 90))
                         }
                         .padding(.horizontal, 24)
                         .padding(.vertical, 12)

@@ -42,8 +42,7 @@ struct CardView: View {
                     .frame(width: imageCircle*0.75)
                     .grayscale(grayCard ? 1 : 0)
             }
-            if(withLabel){
-                Text(label)
+                Text(withLabel ? label : " ")
                     .fontWeight(.heavy)
                     .font(.custom("Baloo2-Bold", size: labelFont))
                     .frame(width: labelWidth)
@@ -56,7 +55,6 @@ struct CardView: View {
                             .fill(.white)
                     )
                     .foregroundStyle(.tealBlinko)
-            }
         }
         .frame(width: cardSize, height: cardSize * 1.43) // 500/350
         .background(
