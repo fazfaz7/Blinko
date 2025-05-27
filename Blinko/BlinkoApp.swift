@@ -13,7 +13,7 @@ struct BlinkoApp: App {
     @StateObject var userProgress = UserProgress()
     var body: some Scene {
         WindowGroup {
-            ChooseMinigameView()
+            SelectLevel(userProgress: UserProgress())
         }
     }
 }

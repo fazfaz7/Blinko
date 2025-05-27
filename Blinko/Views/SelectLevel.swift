@@ -34,7 +34,7 @@ struct SelectLevel: View {
             .padding()
         }
         .fullScreenCover(item: $selectedLevel) { level in
-            MinigameContainerView(
+            ChooseMinigameView(
                 level: level,
                 userProgress: userProgress
             ) {
