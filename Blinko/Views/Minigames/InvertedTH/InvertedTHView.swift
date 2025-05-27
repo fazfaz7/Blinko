@@ -9,8 +9,8 @@ import SwiftUI
 
 struct InvertedTHView: View {
     // View Model of ML that manages the object-detection part.
-    @State private var viewModel = MLViewModel()
-
+    @State private var viewModel: MLViewModel
+    
     // The only data that needs to be passed to the THView is the array of 4 objects. With shuffled order.
     var levelObjects: [VocabularyWord]
 
@@ -57,6 +57,7 @@ struct InvertedTHView: View {
         self.levelObjects = level.words.shuffled()
         self.userProgress = userProgress
         self.onNext = onNext
+        _viewModel = State(initialValue: MLViewModel(modelName: level.title))
     }
     
     var body: some View {

@@ -68,7 +68,7 @@ struct CardView: View {
 #Preview {
     HStack{
         VStack(){
-            CardView(cardSize: 120, imageName: level1.words[0].imageName, label: level1.words[0].baseWord)
+            CardView(cardSize: 120, imageName: level1_data.words[0].imageName, label: level1_data.words[0].baseWord)
         }
         Spacer()
     }.padding()
