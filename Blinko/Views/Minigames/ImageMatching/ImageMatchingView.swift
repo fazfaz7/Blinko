@@ -54,11 +54,20 @@ struct ImageMatchingView: View {
     
     var body: some View {
         ZStack {
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                        MascotView(mood: mascotMood)
+                }
+            }
+            .ignoresSafeArea()
+            
             if showConfetti {
-                LottieView(filename: "confetti", loopMode: .loop)
-                    .frame(width: 800, height: 800)
+                LottieView(filename: "StelleBack", loopMode: .loop)
                     .allowsHitTesting(false)
                     .transition(.scale)
+                    .ignoresSafeArea()
             }
             
             VStack(spacing: 30) {
@@ -119,14 +128,6 @@ struct ImageMatchingView: View {
              
                 Spacer()
             }
-            VStack {
-                Spacer()
-                HStack {
-                    Spacer()
-                        MascotView(mood: mascotMood)
-                }
-            }
-            .ignoresSafeArea()
             }
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
