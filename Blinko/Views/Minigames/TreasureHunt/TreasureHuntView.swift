@@ -312,5 +312,5 @@ struct TreasureHuntView: View {
 }
 
 #Preview {
-    //TreasureHuntView(onNext: { currentStage = .memoryGame)
+    TreasureHuntView(level: level1_data, userProgress: UserProgress(), onNext: {})
 }
