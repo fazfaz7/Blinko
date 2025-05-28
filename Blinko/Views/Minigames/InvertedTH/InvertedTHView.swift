@@ -149,7 +149,9 @@ struct InvertedTHView: View {
                                 if foundIndexes.contains(index) {
 
                                 } else if currentIndex != index {
-                                    RoundedRectangle(cornerRadius: 10)
+                                    Image("CardBack")
+                                        .resizable()
+                                        .scaledToFill()
                                 }
 
                             }
@@ -276,5 +278,5 @@ struct InvertedTHView: View {
 }
 
 #Preview {
-    //InvertedTHView(onNext: { currentStage = .memoryGame)
+    InvertedTHView(level: level1_data, userProgress: UserProgress(), onNext: {})
 }
