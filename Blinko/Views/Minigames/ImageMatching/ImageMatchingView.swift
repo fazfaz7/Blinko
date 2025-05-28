@@ -30,6 +30,7 @@ struct ImageMatchingView: View {
     
     @State private var rotation1: Angle = .degrees(0)
     @State private var rotation2: Angle = .degrees(0)
+    @State private var floatPhase = false
 
     
     // TextToSpeech viewModel to prompt words
@@ -118,12 +119,22 @@ struct ImageMatchingView: View {
                             cardColor: color
                         )
                         .modifier(Shake(animatableData: wrongTapTriggers[word.id, default: 0]))
-                        .floating()
+                        .offset(y: floatPhase ? -5 : 5)
                         .onTapGesture {
                             guard correctWordOverlay == nil else { return }
                             SpeechViewModel.speak(text: word.baseWord, language: "English")
                             checkAnswer(selected: word)
                         }
+                    }
+                }
+                .onAppear {
+                    withAnimation(Animation.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
+                        floatPhase.toggle()
+                    }
+                }
+                .onChange(of: $remainingWords.count) {
+                    withAnimation(Animation.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
+                        floatPhase.toggle()
                     }
                 }
                 .padding(.horizontal)
@@ -255,28 +266,6 @@ struct Shake: GeometryEffect {
     func effectValue(size: CGSize) -> ProjectionTransform {
         let translation = amount * sin(animatableData * .pi * shakesPerUnit)
         return ProjectionTransform(CGAffineTransform(translationX: translation, y: 0))
-    }
-}
-
-struct Floating: ViewModifier {
-    @State private var float = false
-
-    func body(content: Content) -> some View {
-        content
-            .offset(y: float ? -5 : 5)
-            .onAppear {
-                withAnimation(
-                    Animation.easeInOut(duration: 2).repeatForever(autoreverses: true)
-                ) {
-                    float.toggle()
-                }
-            }
-    }
-}
-
-extension View {
-    func floating() -> some View {
-        self.modifier(Floating())
     }
 }
 
