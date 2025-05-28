@@ -20,10 +20,19 @@ class TextToSpeechViewModel: ObservableObject {
     }
 }
 
-class TextToSpeechService {
+class TextToSpeechService: NSObject, AVSpeechSynthesizerDelegate {
     private let synthesizer = AVSpeechSynthesizer()
+    private var isSpeaking = false
+
+    override init() {
+        super.init()
+        synthesizer.delegate = self
+    }
 
     func speak(text: String, language: String) {
+        guard !isSpeaking else { return }
+        isSpeaking = true
+
         let utterance = AVSpeechUtterance(string: text)
         utterance.rate = 0.5
         utterance.pitchMultiplier = 1.0
@@ -38,4 +47,13 @@ class TextToSpeechService {
 
         synthesizer.speak(utterance)
     }
+
+    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+        isSpeaking = false
+    }
+
+    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didCancel utterance: AVSpeechUtterance) {
+        isSpeaking = false
+    }
 }
+

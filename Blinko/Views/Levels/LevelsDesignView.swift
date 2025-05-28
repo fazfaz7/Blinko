@@ -1,13 +1,6 @@
-//
-//  LevelsDesignView.swift
-//  Blinko
-//
-//  Created by Adrian Emmanuel Faz Mercado on 23/05/25.
-//
-
 import SwiftUI
 
-// PreferenceKey (no change)
+// PreferenceKey to track scroll offset
 struct ScrollOffsetKey: PreferenceKey {
     static var defaultValue: CGFloat = 0
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
@@ -15,19 +8,19 @@ struct ScrollOffsetKey: PreferenceKey {
     }
 }
 
-// Reuse your Planet struct to represent a galaxy
 struct Planet: Identifiable {
-    let id        = UUID()
+    let id = UUID()
     let imageName: String
-    let baseX:     CGFloat   // world X
-    let baseY:     CGFloat   // world Y
-    let size:      CGFloat
-    let parallax:  CGFloat   // unused here, but fill in
+    let baseX: CGFloat
+    let baseY: CGFloat
+    let size: CGFloat
+    let parallax: CGFloat
 }
 
 struct LevelsDesignView: View {
     let repeatCount = 3
     @State private var galaxies: [Planet] = []
+    @State private var scrollOffset: CGFloat = 0 // ✅ Track scroll offset
 
     var body: some View {
         GeometryReader { geo in
@@ -39,78 +32,80 @@ struct LevelsDesignView: View {
 
             ScrollView(.horizontal, showsIndicators: false) {
                 ZStack {
-                  // ── ➊ Starfield ────────────────────────────
-                  HStack(spacing: 0) {
-                    ForEach(0..<repeatCount, id: \.self) { _ in
-                      Image("SpaceBackground")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: tileWidth, height: screenSize.height)
-                        .clipped()
-                        
+                    // ✅ Scroll offset tracking
+                    GeometryReader { scrollGeo in
+                        Color.clear
+                            .preference(
+                                key: ScrollOffsetKey.self,
+                                value: scrollGeo.frame(in: .named("scroll")).minX
+                            )
                     }
-                  }
-                  .frame(width: totalWidth, height: screenSize.height)
+                    .frame(width: 0, height: 0)
 
-                  // ── ➋ Nebulas
-                  HStack(spacing: 0) {
-                    ForEach(0..<repeatCount, id: \.self) { _ in
-                      Image("Nebulas")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: tileWidth, height: screenSize.height)
-                        .clipped()
+                    // ── ➊ Starfield ────────────────────────────
+                    HStack(spacing: 0) {
+                        ForEach(0..<repeatCount, id: \.self) { _ in
+                            Image("SpaceBackground")
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: tileWidth, height: screenSize.height)
+                                .clipped()
+                        }
                     }
-                  }
-                  .frame(width: totalWidth, height: screenSize.height)
 
-                  // ── ➌ Galaxies (3, evenly-spaced, random Y) ─
-                  ForEach(galaxies) { g in
-                    Image(g.imageName)
-                      .resizable()
-                      .frame(width: g.size, height: g.size)
-                      .position(x: g.baseX, y: g.baseY)
-                  }
+                    // ── ➋ Nebulas ──────────────────────────────
+                    HStack(spacing: 0) {
+                        ForEach(0..<repeatCount, id: \.self) { _ in
+                            Image("Nebulas")
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: tileWidth, height: screenSize.height)
+                                .clipped()
+                        }
+                    }
+                    .offset(x: -scrollOffset * 10)
+
+                    // ── ➌ Galaxies ─────────────────────────────
+                    ForEach(galaxies) { g in
+                        Image(g.imageName)
+                            .resizable()
+                            .frame(width: g.size, height: g.size)
+                            .position(x: g.baseX, y: g.baseY)
+                            .offset(x: -scrollOffset * g.parallax)
+                    }
                 }
                 .frame(width: totalWidth, height: screenSize.height)
-                
                 .onAppear {
-                  // disable bounce once
-                  UIScrollView.appearance().bounces = false
+                    UIScrollView.appearance().bounces = false
+                    guard galaxies.isEmpty else { return }
 
-                  // only generate once
-                  guard galaxies.isEmpty else { return }
+                    let xs = (0..<repeatCount).map { i in
+                        tileWidth * (CGFloat(i) + 0.5)
+                    }
 
-                  // for 3 tiles, center at 0.5, 1.5, 2.5 × tileWidth
-                  let xs = (0..<repeatCount).map { i in
-                    tileWidth * (CGFloat(i) + 0.5)
-                  }
-                  var gen: [Planet] = []
-                  for (i, x) in xs.enumerated() {
-                    let randomY = CGFloat.random(in: 0.2...0.8) * screenSize.height
-                    let randomSize = CGFloat.random(in: 300...400)
-                    gen.append(
-                      Planet(
-                        imageName: "galaxy\(i+1)",
-                        baseX: x,
-                        baseY: randomY,
-                        size: randomSize,
-                        parallax: 0.1
-                      )
-                    )
-                  }
-                  galaxies = gen
+                    galaxies = xs.enumerated().map { (i, x) in
+                        Planet(
+                            imageName: "galaxy\(i+1)",
+                            baseX: x,
+                            baseY: CGFloat.random(in: 0.2...0.8) * screenSize.height,
+                            size: CGFloat.random(in: 300...400),
+                            parallax: CGFloat.random(in: 0.05...0.2)
+                        )
+                    }
+                }
+                .onPreferenceChange(ScrollOffsetKey.self) { value in
+                    scrollOffset = -value // Flip to match scroll direction
                 }
             }
+            .coordinateSpace(name: "scroll") // ✅ Custom coordinate space
         }
         .ignoresSafeArea()
         .onDisappear {
-          UIScrollView.appearance().bounces = true
+            UIScrollView.appearance().bounces = true
         }
     }
 }
 
 #Preview {
-  LevelsDesignView()
+    LevelsDesignView()
 }
-

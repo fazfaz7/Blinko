@@ -28,6 +28,10 @@ struct ImageMatchingView: View {
     
     @State private var showConfetti = false
     
+    @State private var rotation1: Angle = .degrees(0)
+    @State private var rotation2: Angle = .degrees(0)
+
+    
     // TextToSpeech viewModel to prompt words
     @StateObject private var SpeechViewModel = TextToSpeechViewModel(
         textToSpeechService: TextToSpeechService())
@@ -35,33 +39,47 @@ struct ImageMatchingView: View {
     // Closure used to go to the next minigame. (Image Matching)
     @ObservedObject var userProgress: UserProgress
     var onNext: () -> Void
-
+    
     init(level: Level,  userProgress: UserProgress, onNext: @escaping () -> Void) {
         self.level = level
         _remainingWords = State(initialValue: level.words)
-
+        
         var map: [UUID: Color] = [:]
         for (index, word) in level.words.enumerated() {
             let color = colors[index % colors.count]
             map[word.id] = color
         }
         _colorMap = State(initialValue: map)
-       
-       self.userProgress = userProgress
+        
+        self.userProgress = userProgress
         self.onNext = onNext
         
     }
     
     var body: some View {
         ZStack {
-            VStack {
-                Spacer()
-                HStack {
-                    Spacer()
-                        MascotView(mood: mascotMood)
+            // PLANETS BACKGROUND
+            Image("planet2_image_matching")
+                .resizable()
+                .scaledToFill()
+                .rotationEffect(rotation1)
+                .offset(x: -500, y: -500)
+                .onAppear {
+                    withAnimation(Animation.linear(duration: 60).repeatForever(autoreverses: false)) {
+                        rotation1 = .degrees(360)
+                    }
                 }
-            }
-            .ignoresSafeArea()
+            
+            Image("planet1_image_matching")
+                .resizable()
+                .scaledToFill()
+                .rotationEffect(rotation2)
+                .offset(x: 550, y: 500)
+                .onAppear {
+                    withAnimation(Animation.linear(duration: 180).repeatForever(autoreverses: false)) {
+                        rotation2 = .degrees(360)
+                    }
+                }
             
             if showConfetti {
                 LottieView(filename: "StelleBack", loopMode: .loop)
@@ -70,40 +88,47 @@ struct ImageMatchingView: View {
                     .ignoresSafeArea()
             }
             
-            VStack(spacing: 30) {
+            VStack(spacing: 100) {
                 Spacer()
                 
                 // Blinko animation after the game has ended
                 if(isGameFinished){
-                 
-                 Button {
-                 userProgress.markStageCompleted(.memoryGame, for: level)
-                 onNext()
-                 } label: {
-                 Text("Next Game")
-                 .padding()
-                 .foregroundStyle(.white)
-                 .background(RoundedRectangle(cornerRadius: 10).fill(.blue))
-                 
-                 }
-                 }
+                    
+                    Button {
+                        userProgress.markStageCompleted(.memoryGame, for: level)
+                        onNext()
+                    } label: {
+                        Text("Next Game")
+                            .padding()
+                            .foregroundStyle(.white)
+                            .background(RoundedRectangle(cornerRadius: 10).fill(.blue))
+                        
+                    }
+                }
                 
                 // List the cards
                 HStack(spacing: 30) {
                     ForEach(remainingWords, id: \.id) { word in
                         let color = colorMap[word.id] ?? .gray
-                        CardView(cardSize: 240, imageName: word.imageName, withLabel: true, label: word.baseWord, cardColor: color)
-                            .modifier(Shake(animatableData: wrongTapTriggers[word.id, default: 0]))
-                        // Every time user tap a card it will trigger audio and check if it's the right card
-                            .onTapGesture {
-                                guard correctWordOverlay == nil else { return }
-                                SpeechViewModel.speak(text: word.baseWord, language: "English")
-                                checkAnswer(selected: word)
-                            }
+                        CardView(
+                            cardSize: 240,
+                            imageName: word.imageName,
+                            withLabel: true,
+                            label: word.baseWord,
+                            cardColor: color
+                        )
+                        .modifier(Shake(animatableData: wrongTapTriggers[word.id, default: 0]))
+                        .floating()
+                        .onTapGesture {
+                            guard correctWordOverlay == nil else { return }
+                            SpeechViewModel.speak(text: word.baseWord, language: "English")
+                            checkAnswer(selected: word)
+                        }
                     }
-                    
                 }
                 .padding(.horizontal)
+
+
                 
                 // Button to show the target word
                 if !isGameFinished, let word = targetWord {
@@ -119,46 +144,58 @@ struct ImageMatchingView: View {
                         .padding(.horizontal, 24)
                         .padding(.vertical, 12)
                         .background(Color.white)
-                        .foregroundColor(.tealBlinko)
+                        .foregroundColor(.darkBlueBlinko)
                         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                         .shadow(radius: 2)
                     }
                     
                 }
-             
+                
                 Spacer()
             }
-            }
-            .padding()
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-        
-            // Overlay of the correct card when it is selected
-            .overlay(
-                ZStack {
-                    if let word = correctWordOverlay {
-                        Color.black.opacity(0.4)
-                            .ignoresSafeArea()
-                            .transition(.opacity)
-                        
-                        CardView(
-                            cardSize: 300,
-                            imageName: word.imageName,
-                            withLabel: true,
-                            label: word.baseWord,
-                            cardColor: colorMap[word.id] ?? .gray
-                        )
-                        .transition(.scale(scale: 0.5).combined(with: .opacity))
-                        
-                        .zIndex(1)
-                    }
+            
+            // Mascot
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    MascotView(mood: mascotMood, width: 450, height: 450)
+                        .offset(x: 40, y: -150)
                 }
-                    .animation(.easeOut(duration: 0.4), value: correctWordOverlay)
-            )
-            .background(Color.tealBlinko)
-            .ignoresSafeArea()
-            .onAppear {
-                pickNewTarget()
             }
+            .ignoresSafeArea()
+            
+        }
+        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        
+        // Overlay of the correct card when it is selected
+        .overlay(
+            ZStack {
+                if let word = correctWordOverlay {
+                    Color.black.opacity(0.4)
+                        .ignoresSafeArea()
+                        .transition(.opacity)
+                    
+                    CardView(
+                        cardSize: 300,
+                        imageName: word.imageName,
+                        withLabel: true,
+                        label: word.baseWord,
+                        cardColor: colorMap[word.id] ?? .gray
+                    )
+                    .transition(.scale(scale: 0.5).combined(with: .opacity))
+                    
+                    .zIndex(1)
+                }
+            }
+                .animation(.easeOut(duration: 0.4), value: correctWordOverlay)
+        )
+        .background(.darkBlueBlinko)
+        .ignoresSafeArea()
+        .onAppear {
+            pickNewTarget()
+        }
     }
     
     // Picks a new target from the remaining words, and prompt the audio
@@ -179,7 +216,7 @@ struct ImageMatchingView: View {
         if selected == targetWord {
             mascotMood = .wow  // Quick positive feedback
             correctWordOverlay = selected
-
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                 withAnimation {
                     remainingWords.removeAll { $0 == selected }
@@ -214,12 +251,35 @@ struct Shake: GeometryEffect {
     var amount: CGFloat = 10
     var shakesPerUnit: CGFloat = 3
     var animatableData: CGFloat
-
+    
     func effectValue(size: CGSize) -> ProjectionTransform {
         let translation = amount * sin(animatableData * .pi * shakesPerUnit)
         return ProjectionTransform(CGAffineTransform(translationX: translation, y: 0))
     }
 }
+
+struct Floating: ViewModifier {
+    @State private var float = false
+
+    func body(content: Content) -> some View {
+        content
+            .offset(y: float ? -5 : 5)
+            .onAppear {
+                withAnimation(
+                    Animation.easeInOut(duration: 2).repeatForever(autoreverses: true)
+                ) {
+                    float.toggle()
+                }
+            }
+    }
+}
+
+extension View {
+    func floating() -> some View {
+        self.modifier(Floating())
+    }
+}
+
 
 #Preview {
     ImageMatchingView(level: level1_data, userProgress: UserProgress(), onNext: {})
