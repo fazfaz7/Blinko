@@ -8,7 +8,17 @@ import SwiftUI
 
 struct TreasureHuntView: View {
     // View Model of ML that manages the object-detection part.
-    @State private var viewModel = MLViewModel()
+    @State private var viewModel: MLViewModel
+    
+    init(level: Level, userProgress: UserProgress, onNext: @escaping () -> Void) {
+        self.level = level
+        self.userProgress = userProgress
+        self.onNext = onNext
+        // Initialize viewModel with the correct model name for this level!
+        _viewModel = State(initialValue: MLViewModel(modelName: level.title))
+    }
+    
+    
 
     // Control variable to show the sheet whenever the user discovers an object.
     @State private var showSheet: Bool = false
@@ -42,7 +52,7 @@ struct TreasureHuntView: View {
         textToSpeechService: TextToSpeechService())
 
     // Current level
-    var level: Level = level1
+    var level: Level = level1_data
    
     @ObservedObject var userProgress: UserProgress
     
@@ -198,12 +208,11 @@ struct TreasureHuntView: View {
                             Spacer()
                             Image(
                                 viewModel.detectedObject != "none"
-                                    ? "blinko2" : "blinko1"
+                                    ? "happy_blinko" : "normal_blinko"
                             )
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 200)
-                            .padding(20)
+                            .frame(width: 350)
                         }
                     }
                 }
@@ -269,6 +278,22 @@ struct TreasureHuntView: View {
                     
                 }
                  
+                VStack {
+                    HStack {
+                        Spacer()
+                        Button {
+                            viewModel.cameraManager.stopSession()
+                                onNext()
+                            
+                        } label: {
+                            Image(systemName: "xmark")
+                                .padding(20)
+                                .foregroundColor(.white)
+                                .background(Circle().fill(.gray.opacity(0.8)))
+                        }
+                    }
+                    Spacer()
+                }.padding()
 
             }.ignoresSafeArea()
                 // Sheet with the data of the detected object that comes up when the user clicks on the camera.

@@ -8,10 +8,15 @@
 
 import SwiftUI
 
-enum GameStage: CaseIterable, Codable{
-    case treasureHunt
-    case memoryGame
-    case invertedTH
+enum GameStage: Identifiable, CaseIterable, Codable{
+    case treasureHunt, memoryGame, invertedTH
+       var id: String { // For fullScreenCover
+           switch self {
+           case .treasureHunt: return "treasureHunt"
+           case .memoryGame: return "memoryGame"
+           case .invertedTH: return "invertedTH"
+           }
+       }
 }
 
 

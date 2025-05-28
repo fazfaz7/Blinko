@@ -222,5 +222,5 @@ struct Shake: GeometryEffect {
 }
 
 #Preview {
-    ImageMatchingView(level: level1, userProgress: UserProgress(), onNext: {})
+    ImageMatchingView(level: level1_data, userProgress: UserProgress(), onNext: {})
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SelectLevel: View {
-    let levels: [Level] = [level1, level2, level3]
+    let levels: [Level] = [level1_data, level2_data, level3_data]
     @ObservedObject var userProgress: UserProgress
     @State private var selectedLevel: Level? = nil
 
@@ -34,7 +34,7 @@ struct SelectLevel: View {
             .padding()
         }
         .fullScreenCover(item: $selectedLevel) { level in
-            MinigameContainerView(
+            ChooseMinigameView(
                 level: level,
                 userProgress: userProgress
             ) {

@@ -9,8 +9,8 @@ import SwiftUI
 
 struct InvertedTHView: View {
     // View Model of ML that manages the object-detection part.
-    @State private var viewModel = MLViewModel()
-
+    @State private var viewModel: MLViewModel
+    
     // The only data that needs to be passed to the THView is the array of 4 objects. With shuffled order.
     var levelObjects: [VocabularyWord]
 
@@ -57,6 +57,7 @@ struct InvertedTHView: View {
         self.levelObjects = level.words.shuffled()
         self.userProgress = userProgress
         self.onNext = onNext
+        _viewModel = State(initialValue: MLViewModel(modelName: level.title))
     }
     
     var body: some View {
@@ -148,7 +149,9 @@ struct InvertedTHView: View {
                                 if foundIndexes.contains(index) {
 
                                 } else if currentIndex != index {
-                                    RoundedRectangle(cornerRadius: 10)
+                                    Image("CardBack")
+                                        .resizable()
+                                        .scaledToFill()
                                 }
 
                             }
@@ -215,6 +218,23 @@ struct InvertedTHView: View {
                 }
                 
             }
+            
+            if currentIndex < levelObjects.count && !showObjectFound && !showObject {
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        Image(
+                            viewModel.detectedObject.lowercased()
+                            == levelObjects[currentIndex].translations[
+                                "en"]!
+                            ? "happy_blinko" : "normal_blinko"
+                        )
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 350)
+                    }
+                }}
 
             if foundIndexes.count == 4 {
                 VStack {
@@ -258,5 +278,5 @@ struct InvertedTHView: View {
 }
 
 #Preview {
-    //InvertedTHView(onNext: { currentStage = .memoryGame)
+    InvertedTHView(level: level1_data, userProgress: UserProgress(), onNext: {})
 }

@@ -25,7 +25,10 @@ class MLViewModel {
     // The Core ML model used for object detection
     private var mlModel: MLModel?
     
-    init() {
+    private let modelName: String  // <--- NEW
+    
+    init(modelName: String) {
+        self.modelName = modelName
         // Load the ML model first (async)
         loadMLModel()
         
@@ -42,7 +45,7 @@ class MLViewModel {
     
     private func loadMLModel() {
         // 1. First try to load compiled model (.mlmodelc)
-        if let compiledModelURL = Bundle.main.url(forResource: "best", withExtension: "mlmodelc") {
+        if let compiledModelURL = Bundle.main.url(forResource: modelName, withExtension: "mlmodelc") {
             do {
                 mlModel = try MLModel(contentsOf: compiledModelURL)
                 print("Successfully loaded compiled model")
@@ -54,7 +57,7 @@ class MLViewModel {
         }
         
         // 2. Fall back to compiling .mlmodel if needed
-        guard let modelURL = Bundle.main.url(forResource: "best", withExtension: "mlmodel") else {
+        guard let modelURL = Bundle.main.url(forResource: modelName, withExtension: "mlmodel") else {
             print("Error: Could not find Test3.mlmodel in bundle")
             return
         }
