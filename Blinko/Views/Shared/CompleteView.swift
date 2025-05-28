@@ -25,6 +25,8 @@ struct CompleteView: View {
     @State private var showPlanet = false
     @State private var showCards = false
     @State private var showStar = false
+    @State private var showNext = false
+    var onExit: () -> Void
     
     var body: some View {
         GeometryReader { geometry in
@@ -75,7 +77,24 @@ struct CompleteView: View {
                         .opacity(showCards ? 1 : 0)
                         .animation(.easeOut(duration: 0.7), value: showCards)
                     
-                    
+                    if showNext {
+                        
+                        Button {
+                            onExit()
+                        } label: {
+                            HStack(spacing: 8) {
+                                Text("Next")
+                                    .font(.custom("Baloo2-Bold", size: 28))
+                            }
+                            .padding()
+                            .background(Color.white)
+                            .foregroundColor(.tealBlinko)
+                            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                            .shadow(radius: 5)
+                            .padding(.top,30)
+                            
+                        }
+                    }
                     Spacer()
                 }
                 
@@ -100,17 +119,22 @@ struct CompleteView: View {
             withAnimation(.easeOut(duration: 1)) {
                 showMoon = true
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                withAnimation(.easeOut(duration: 1)) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                withAnimation(.easeOut(duration: 0.5)) {
                     showPlanet = true
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                     withAnimation(.easeOut(duration: 0.7)) {
                         showCards = true
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         withAnimation(.spring(response: 0.6, dampingFraction: 0.6)) {
                             showStar = true
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                            withAnimation {
+                                showNext = true
+                            }
                         }
                     }
                 }
@@ -121,5 +145,5 @@ struct CompleteView: View {
 }
 
 #Preview {
-    CompleteView()
+    CompleteView(onExit: {})
 }

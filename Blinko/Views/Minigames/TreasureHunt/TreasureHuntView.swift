@@ -17,8 +17,6 @@ struct TreasureHuntView: View {
         // Initialize viewModel with the correct model name for this level!
         _viewModel = State(initialValue: MLViewModel(modelName: level.title))
     }
-    
-    
 
     // Control variable to show the sheet whenever the user discovers an object.
     @State private var showSheet: Bool = false
@@ -59,11 +57,13 @@ struct TreasureHuntView: View {
     // Closure used to go to the next minigame. (Image Matching)
     var onNext: () -> Void
     
+    
 
     var body: some View {
         GeometryReader { geometry in
 
             ZStack {
+               
                 
                 // View of the Camera, behind everything.
                 CameraView(image: $viewModel.currentFrame)
@@ -71,41 +71,17 @@ struct TreasureHuntView: View {
                 
                 if (unlockedItems.count == 4 && !showObjectFound){
                     
-                    VStack {
-                        HStack {
-                            ForEach(0..<4, id: \.self) { index in
-                                
-                                let item = level.words[index]
-                                let cardColor = colors[index]
-                                
-                                
-                                CardView(
-                                    cardSize: geometry.size.width * 0.2,
-                                    imageName: item.imageName,
-                                    label: item.translations[
-                                        "en"]!,
-                                    cardColor: cardColor
-                                ).padding(.horizontal)
-                                
-                                    .onTapGesture {
-                                        speechViewModel.speak(text: item.translations["en"]!, language: "English")
-                                    }
-                                
-                            }
-                        }.padding()
-                        Button {
-                            viewModel.cameraManager.stopSession()
-                            userProgress.markStageCompleted(.treasureHunt, for: level)
-                            onNext()
-                        } label: {
-                            Text("Next Game")
-                                .padding()
-                                .foregroundStyle(.white)
-                                .background(RoundedRectangle(cornerRadius: 10).fill(.blue))
-                                
-                        }
-                    }
+                    CompleteView(onExit: {
+                        viewModel.cameraManager.stopSession()
+                                userProgress.markStageCompleted(.treasureHunt, for: level)
+                        onNext()
+                        
+                    })
+                    
+
                 }
+                
+      
                 if !showObject && !showObjectFound && unlockedItems.count != 4 {
                     // 4 objects on the left of the screen.
                     HStack {

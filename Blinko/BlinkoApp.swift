@@ -14,7 +14,7 @@ struct BlinkoApp: App {
     var body: some Scene {
         WindowGroup {
             //SelectLevel(userProgress: UserProgress())
-            CompleteView()
+            SelectLevel(userProgress: userProgress)
         }
     }
 }

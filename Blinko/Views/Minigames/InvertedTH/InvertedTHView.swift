@@ -158,7 +158,9 @@ struct InvertedTHView: View {
                             .onTapGesture {
                                 if !foundIndexes.contains(index) && index <= currentIndex {
                                     clickedObject = item
-                                    showObject = true
+                                    withAnimation {
+                                        showObject = true
+                                    }
                                 }
                             }
 
@@ -236,21 +238,15 @@ struct InvertedTHView: View {
                     }
                 }}
 
-            if foundIndexes.count == 4 {
-                VStack {
-                    Image("GoodJob")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 800)
-                    
-                    Button {
+            if foundIndexes.count == 4 && !showObjectFound {
+                CompleteView(level: level, onExit: onNext)
+                    .onAppear{
+                        viewModel.cameraManager.stopSession()
                         userProgress.markStageCompleted(.invertedTH, for: level)
-                        onNext()
-                    } label: {
-                        Text("Change!")
                         
                     }
-                }
+               
+                
                  
             }
             
