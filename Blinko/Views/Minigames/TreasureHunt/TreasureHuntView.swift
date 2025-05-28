@@ -17,6 +17,8 @@ struct TreasureHuntView: View {
         // Initialize viewModel with the correct model name for this level!
         _viewModel = State(initialValue: MLViewModel(modelName: level.title))
     }
+    
+    
 
     // Control variable to show the sheet whenever the user discovers an object.
     @State private var showSheet: Bool = false

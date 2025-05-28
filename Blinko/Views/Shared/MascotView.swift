@@ -4,8 +4,6 @@
 //
 //  Created by Vincenzo Gerelli on 26/05/25.
 //
-
-
 import SwiftUI
 
 enum MascotMood {
@@ -13,16 +11,18 @@ enum MascotMood {
 
     var imageName: String {
         switch self {
-        case .normal: return "normal_blinko"
-        case .wow: return "wow_blinko"
-        case .happy: return "happy_blinko"
-        case .angry: return "angry_blinko"
+        case .normal: return "Neutral"
+        case .wow: return "Surprised"
+        case .happy: return "Happy"
+        case .angry: return "Questioning"
         }
     }
 }
 
 struct MascotView: View {
     var mood: MascotMood
+    var width: CGFloat = 300
+    var height: CGFloat = 300
 
     @State private var offset: CGFloat = 0
     @State private var isJumping = false
@@ -31,7 +31,7 @@ struct MascotView: View {
     var body: some View {
         Image(mood.imageName)
             .resizable()
-            .frame(width: 300, height: 300)
+            .frame(width: width, height: height)
             .offset(y: offset)
             .onChange(of: mood) {
                 handleMoodChange()
@@ -82,6 +82,7 @@ struct MascotView: View {
         }
     }
 }
+
 
 #Preview {
     ZStack{
