@@ -12,7 +12,6 @@ struct LevelsBackgroundView: View {
     var body: some View {
         GeometryReader { outerProxy in
             let screenWidth = outerProxy.size.width
-            let screenHeight = outerProxy.size.height
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 0) {

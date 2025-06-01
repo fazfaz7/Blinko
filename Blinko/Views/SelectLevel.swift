@@ -41,6 +41,7 @@ struct SelectLevel: View {
                 selectedLevel = nil
             }
         }
+        .statusBarHidden() 
     }
 }
 

@@ -208,6 +208,7 @@ struct ChooseMinigameView: View {
                     updatePulsingStates()
                     animateProgressLines()
                 }
+                .statusBarHidden() 
 
 
     }

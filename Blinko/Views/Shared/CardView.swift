@@ -46,8 +46,9 @@ struct CardView: View {
                     .fontWeight(.heavy)
                     .font(.custom("Baloo2-Bold", size: labelFont))
                     .frame(width: labelWidth)
+                    .minimumScaleFactor(0.6) // Allow text to shrink if needed
                     .fixedSize(horizontal: false, vertical: true) // Allow the text to wrap
-                    .minimumScaleFactor(0.5) // Allow text to shrink if needed
+                    .lineLimit(1)
                     .multilineTextAlignment(.center)
                     .padding(8)
                     .background(
@@ -68,7 +69,7 @@ struct CardView: View {
 #Preview {
     HStack{
         VStack(){
-            CardView(cardSize: 120, imageName: level1_data.words[0].imageName, label: level1_data.words[0].baseWord)
+            CardView(cardSize: 120, imageName: level1_data.words[0].imageName, label: "faz")
         }
         Spacer()
     }.padding()

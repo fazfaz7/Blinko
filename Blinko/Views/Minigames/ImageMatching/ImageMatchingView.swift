@@ -205,6 +205,7 @@ struct ImageMatchingView: View {
             .onAppear {
                 pickNewTarget()
             }
+            .statusBarHidden() 
         }
     }
     

@@ -230,11 +230,11 @@ struct InvertedTHView: View {
                             viewModel.detectedObject.lowercased()
                             == levelObjects[currentIndex].translations[
                                 "en"]!
-                            ? "happy_blinko" : "normal_blinko"
+                            ? "Happy" : "Neutral"
                         )
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 350)
+                        .frame(width: 300)
                     }
                 }}
 
@@ -269,6 +269,7 @@ struct InvertedTHView: View {
             .onDisappear {
                 viewModel.cameraManager.stopSession()
                     }
+            .statusBarHidden() 
 
     }
 }

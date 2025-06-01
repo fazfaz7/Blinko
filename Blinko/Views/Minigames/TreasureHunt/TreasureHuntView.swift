@@ -186,11 +186,11 @@ struct TreasureHuntView: View {
                             Spacer()
                             Image(
                                 viewModel.detectedObject != "none"
-                                    ? "happy_blinko" : "normal_blinko"
+                                    ? "Happy" : "Neutral"
                             )
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 350)
+                            .frame(width: 300)
                         }
                     }
                 }
@@ -255,23 +255,7 @@ struct TreasureHuntView: View {
                 if unlockedItems.count == 4 && showObjectFound != true {
                     
                 }
-                 
-                VStack {
-                    HStack {
-                        Spacer()
-                        Button {
-                            viewModel.cameraManager.stopSession()
-                                onNext()
-                            
-                        } label: {
-                            Image(systemName: "xmark")
-                                .padding(20)
-                                .foregroundColor(.white)
-                                .background(Circle().fill(.gray.opacity(0.8)))
-                        }
-                    }
-                    Spacer()
-                }.padding()
+                
 
             }.ignoresSafeArea()
                 // Sheet with the data of the detected object that comes up when the user clicks on the camera.
@@ -284,7 +268,7 @@ struct TreasureHuntView: View {
                 .onDisappear {
                     viewModel.cameraManager.stopSession()
                 }
-        }
+        }.statusBarHidden() 
 
     }
 }

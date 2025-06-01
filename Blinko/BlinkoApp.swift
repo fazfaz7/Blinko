@@ -15,6 +15,7 @@ struct BlinkoApp: App {
         WindowGroup {
             //SelectLevel(userProgress: UserProgress())
             SelectLevel(userProgress: userProgress)
+                
         }
     }
 }
