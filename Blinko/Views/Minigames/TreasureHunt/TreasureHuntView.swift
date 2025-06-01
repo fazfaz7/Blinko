@@ -73,7 +73,7 @@ struct TreasureHuntView: View {
                 
                 if (unlockedItems.count == 4 && !showObjectFound){
                     
-                    CompleteView(onExit: {
+                    CompleteView(level: level, onExit: {
                         viewModel.cameraManager.stopSession()
                                 userProgress.markStageCompleted(.treasureHunt, for: level)
                         onNext()
