@@ -23,11 +23,21 @@ class TextToSpeechViewModel: ObservableObject {
 class TextToSpeechService: NSObject, AVSpeechSynthesizerDelegate {
     private let synthesizer = AVSpeechSynthesizer()
     private var isSpeaking = false
-
-    override init() {
-        super.init()
-        synthesizer.delegate = self
-    }
+    private var isPrepared = false
+        
+        override init() {
+            super.init()
+            synthesizer.delegate = self
+            prepareTTS()
+        }
+        
+        private func prepareTTS() {
+            // Speak an empty string silently to warm up the engine
+            let utterance = AVSpeechUtterance(string: "")
+            utterance.volume = 0
+            synthesizer.speak(utterance)
+            isPrepared = true
+        }
 
     func speak(text: String, language: String) {
         guard !isSpeaking else { return }

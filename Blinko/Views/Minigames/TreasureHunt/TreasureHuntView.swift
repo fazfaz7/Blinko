@@ -225,12 +225,14 @@ struct TreasureHuntView: View {
                                 language: unlockedItems.contains(
                                     object.baseWord) ? langCode : "it")
                         }.onAppear {
-                            speechViewModel.speak(
-                                text: object.translations[
-                                    unlockedItems.contains(object.baseWord)
-                                    ? langCode : "it"]!,
-                                language: unlockedItems.contains(
-                                    object.baseWord) ? langCode : "it")
+                            DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {
+                                speechViewModel.speak(
+                                    text: object.translations[
+                                        unlockedItems.contains(object.baseWord)
+                                        ? langCode : "it"]!,
+                                    language: unlockedItems.contains(
+                                        object.baseWord) ? langCode : "it")
+                            }
                         }
                         
                         .transition(.scale(scale: 0.5).combined(with: .opacity))
@@ -272,10 +274,10 @@ struct TreasureHuntView: View {
             }.ignoresSafeArea()
                 // Sheet with the data of the detected object that comes up when the user clicks on the camera.
                 .onTapGesture {
-                    withAnimation {
+                    
                         showObject = false
                         showObjectFound = false
-                    }
+                    
                 }
                 .onDisappear {
                     viewModel.cameraManager.stopSession()
