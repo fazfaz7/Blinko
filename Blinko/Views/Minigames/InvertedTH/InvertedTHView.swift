@@ -170,6 +170,13 @@ struct InvertedTHView: View {
                     Spacer()
                 }
             }
+            
+            if showObject || showObjectFound {
+                  Color.black.opacity(0.4)
+                      .ignoresSafeArea()
+                      .transition(.opacity)
+              }
+
 
             
             // If the variable showObject is true, then we show the card in a big size along with its pronunciation.

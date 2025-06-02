@@ -179,6 +179,7 @@ struct TreasureHuntView: View {
                             }
                         }
 
+                        
                     }
 
                     // Blinko in the right bottom part of the screen!
@@ -196,6 +197,13 @@ struct TreasureHuntView: View {
                         }
                     }
                 }
+                
+                if showObject || showObjectFound {
+                      Color.black.opacity(0.4)
+                          .ignoresSafeArea()
+                          .transition(.opacity)
+                  }
+
 
                 if showObject {
 
@@ -224,6 +232,8 @@ struct TreasureHuntView: View {
                                 language: unlockedItems.contains(
                                     object.baseWord) ? langCode : "it")
                         }
+                        
+                        .transition(.scale(scale: 0.5).combined(with: .opacity))
 
                     }
 
