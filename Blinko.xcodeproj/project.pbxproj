@@ -6,13 +6,30 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		29C02BFD2DE3DEF700BBA4A3 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 29C02BFC2DE3DEF700BBA4A3 /* Lottie */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		628532122DD782C800C73725 /* Blinko.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blinko.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		29B59BD12DDC798900CE5011 /* Exceptions for "Blinko" folder in "Blinko" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 628532112DD782C800C73725 /* Blinko */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		628532142DD782C800C73725 /* Blinko */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				29B59BD12DDC798900CE5011 /* Exceptions for "Blinko" folder in "Blinko" target */,
+			);
 			path = Blinko;
 			sourceTree = "<group>";
 		};
@@ -23,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				29C02BFD2DE3DEF700BBA4A3 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +83,7 @@
 			);
 			name = Blinko;
 			packageProductDependencies = (
+				29C02BFC2DE3DEF700BBA4A3 /* Lottie */,
 			);
 			productName = Blinko;
 			productReference = 628532122DD782C800C73725 /* Blinko.app */;
@@ -94,6 +113,9 @@
 			);
 			mainGroup = 628532092DD782C800C73725;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				29C02BFB2DE3DEF700BBA4A3 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 628532132DD782C800C73725 /* Products */;
 			projectDirPath = "";
@@ -255,13 +277,14 @@
 				DEVELOPMENT_TEAM = 2TX9W9SS3U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Blinko/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Blinko;
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to the camera to be able to detect every day objects";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationLandscapeRight;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -290,13 +313,14 @@
 				DEVELOPMENT_TEAM = 2TX9W9SS3U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Blinko/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Blinko;
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to the camera to be able to detect every day objects";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationLandscapeRight;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -336,6 +360,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		29C02BFB2DE3DEF700BBA4A3 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.5.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		29C02BFC2DE3DEF700BBA4A3 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 29C02BFB2DE3DEF700BBA4A3 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6285320A2DD782C800C73725 /* Project object */;
 }

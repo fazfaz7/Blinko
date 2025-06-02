@@ -20,17 +20,36 @@ class TextToSpeechViewModel: ObservableObject {
     }
 }
 
-class TextToSpeechService {
+class TextToSpeechService: NSObject, AVSpeechSynthesizerDelegate {
     private let synthesizer = AVSpeechSynthesizer()
+    private var isSpeaking = false
+    private var isPrepared = false
+        
+        override init() {
+            super.init()
+            synthesizer.delegate = self
+            prepareTTS()
+        }
+        
+        private func prepareTTS() {
+            // Speak an empty string silently to warm up the engine
+            let utterance = AVSpeechUtterance(string: "")
+            utterance.volume = 0
+            synthesizer.speak(utterance)
+            isPrepared = true
+        }
 
     func speak(text: String, language: String) {
+        guard !isSpeaking else { return }
+        isSpeaking = true
+
         let utterance = AVSpeechUtterance(string: text)
         utterance.rate = 0.5
         utterance.pitchMultiplier = 1.0
 
-        if language.contains("Italian") {
+        if language == "it" {
             utterance.voice = AVSpeechSynthesisVoice(language: "it-IT")
-        } else if language.contains("Spanish") {
+        } else if language == "es" {
             utterance.voice = AVSpeechSynthesisVoice(language: "es-MX")
         } else {
             utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
@@ -38,4 +57,13 @@ class TextToSpeechService {
 
         synthesizer.speak(utterance)
     }
+
+    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+        isSpeaking = false
+    }
+
+    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didCancel utterance: AVSpeechUtterance) {
+        isSpeaking = false
+    }
 }
+

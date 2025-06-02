@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct BlinkoApp: App {
+    
+    @StateObject var userProgress = UserProgress()
+    @AppStorage("selectedLanguage") var langCode: String = "es"
     var body: some Scene {
         WindowGroup {
-            TreasureHuntView()
+            //SelectLevel(userProgress: UserProgress())
+            SelectLevel(userProgress: userProgress)
+                
         }
     }
 }

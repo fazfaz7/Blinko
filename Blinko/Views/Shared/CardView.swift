@@ -10,8 +10,12 @@ import SwiftUI
 struct CardView: View {
     var cardSize: CGFloat = 350
     var imageName: String = "telefono2"
+    var withLabel: Bool = true
     var label: String = "Phone"
     var cardColor: Color = .pinkBlinko
+    var isSilhouette: Bool = false
+    var grayCard: Bool = false
+    @AppStorage("selectedLanguage") var langCode: String = "es"
     
     var body: some View {
         // We are using dynamic sizing based on cardSize (for now)
@@ -31,37 +35,41 @@ struct CardView: View {
                 
                 // For this, we we'll always have the same size of images so it shouldn't be a problem in the future.
                 Image(imageName)
+                    .renderingMode(isSilhouette ? .template : .original) // Used to make the silhouette when needed.
                     .resizable()
                     .scaledToFit()
-                    .frame(width: imageCircle*0.65)
+                    .foregroundStyle(isSilhouette ? .gray : .clear)
+                    .frame(width: imageCircle*0.75)
+                    .grayscale(grayCard ? 1 : 0)
             }
-            
-            Text(label)
-                .fontWeight(.heavy)
-                .font(.system(size: labelFont))
-                .frame(width: labelWidth)
-                .fixedSize(horizontal: false, vertical: true) // Allow the text to wrap
-                .minimumScaleFactor(0.5) // Allow text to shrink if needed
-                .multilineTextAlignment(.center)
-                .padding(8)
-                .background(
-                    RoundedRectangle(cornerRadius: cornerRadius)
-                        .fill(.white)
-                )
-                .foregroundStyle(.tealBlinko)
+                Text(withLabel ? label : " ")
+                    .fontWeight(.heavy)
+                    .font(.custom("Baloo2-Bold", size: labelFont))
+                    .frame(width: labelWidth)
+                    .minimumScaleFactor(0.6) // Allow text to shrink if needed
+                    .fixedSize(horizontal: false, vertical: true) // Allow the text to wrap
+                    .lineLimit(1)
+                    .multilineTextAlignment(.center)
+                    .padding(8)
+                    .background(
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .fill(.white)
+                    )
+                    .foregroundStyle(.tealBlinko)
         }
         .frame(width: cardSize, height: cardSize * 1.43) // 500/350
         .background(
             RoundedRectangle(cornerRadius: cornerRadius)
                 .fill(cardColor)
         )
+        .grayscale(grayCard ? 1 : 0)
     }
 }
 
 #Preview {
     HStack{
         VStack(){
-            CardView(cardSize: 120, imageName: level2.words[0].imageName, label: level2.words[0].baseWord)
+            CardView(cardSize: 120, imageName: level1_data.words[0].imageName, label: "faz")
         }
         Spacer()
     }.padding()
