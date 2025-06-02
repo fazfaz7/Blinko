@@ -91,13 +91,6 @@ struct ImageMatchingView: View {
                         }
                     }
                 
-                if showConfetti {
-                    LottieView(filename: "StelleBack", loopMode: .loop)
-                        .allowsHitTesting(false)
-                        .transition(.scale)
-                        .ignoresSafeArea()
-                }
-                
                 VStack(spacing: 100) {
                     Spacer()
                     

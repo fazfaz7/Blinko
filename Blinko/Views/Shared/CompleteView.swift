@@ -26,6 +26,7 @@ struct CompleteView: View {
     @State private var showCards = false
     @State private var showStar = false
     @State private var showNext = false
+    @State private var showConfetti = false
     var onExit: () -> Void
     @AppStorage("selectedLanguage") var langCode: String = "es"
     
@@ -33,6 +34,7 @@ struct CompleteView: View {
         GeometryReader { geometry in
             ZStack {
                 Color.darkBlue.ignoresSafeArea()
+                
                 VStack {
                     Spacer()
                     Image("BluePlanet")
@@ -44,6 +46,14 @@ struct CompleteView: View {
                         .animation(.easeOut(duration: 0.8), value: showPlanet)
                     
                 }
+                
+                if showConfetti {
+                    LottieView(filename: "StelleBack", loopMode: .loop)
+                        .allowsHitTesting(false)
+                        .transition(.scale)
+                        .ignoresSafeArea()
+                }
+                
                 VStack {
                     Image("luna")
                         .resizable()
@@ -51,7 +61,6 @@ struct CompleteView: View {
                         .frame(width: geometry.size.height/2.5)
                         .offset(y: showMoon ? 0 : -geometry.size.height/2)
                         .animation(.easeOut(duration: 0.8), value: showMoon)
-                    
                     
                     
                     HStack {
@@ -131,6 +140,7 @@ struct CompleteView: View {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         withAnimation(.spring(response: 0.6, dampingFraction: 0.6)) {
                             showStar = true
+                            showConfetti = true
                         }
                         DispatchQueue.main.asyncAfter(deadline: .now()+1) {
                             withAnimation {
