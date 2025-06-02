@@ -37,9 +37,9 @@ class TextToSpeechService: NSObject, AVSpeechSynthesizerDelegate {
         utterance.rate = 0.5
         utterance.pitchMultiplier = 1.0
 
-        if language.contains("Italian") {
+        if language == "it" {
             utterance.voice = AVSpeechSynthesisVoice(language: "it-IT")
-        } else if language.contains("Spanish") {
+        } else if language == "es" {
             utterance.voice = AVSpeechSynthesisVoice(language: "es-MX")
         } else {
             utterance.voice = AVSpeechSynthesisVoice(language: "en-US")

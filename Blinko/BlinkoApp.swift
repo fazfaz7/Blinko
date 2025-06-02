@@ -11,6 +11,7 @@ import SwiftUI
 struct BlinkoApp: App {
     
     @StateObject var userProgress = UserProgress()
+    @AppStorage("selectedLanguage") var langCode: String = "es"
     var body: some Scene {
         WindowGroup {
             //SelectLevel(userProgress: UserProgress())

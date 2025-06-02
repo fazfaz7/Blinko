@@ -40,6 +40,7 @@ struct ImageMatchingView: View {
     // Closure used to go to the next minigame. (Image Matching)
     @ObservedObject var userProgress: UserProgress
     var onNext: () -> Void
+    @AppStorage("selectedLanguage") var langCode: String = "es"
     
     init(level: Level,  userProgress: UserProgress, onNext: @escaping () -> Void) {
         self.level = level
@@ -110,14 +111,14 @@ struct ImageMatchingView: View {
                                 cardSize: 240,
                                 imageName: word.imageName,
                                 withLabel: true,
-                                label: word.baseWord,
+                                label: word.translations[langCode]!,
                                 cardColor: color
                             )
                             .modifier(Shake(animatableData: wrongTapTriggers[word.id, default: 0]))
                             .offset(y: floatPhase ? -5 : 5)
                             .onTapGesture {
                                 guard correctWordOverlay == nil else { return }
-                                SpeechViewModel.speak(text: word.baseWord, language: "English")
+                                SpeechViewModel.speak(text: word.translations[langCode]!, language: langCode)
                                 checkAnswer(selected: word)
                             }
                         }
@@ -139,12 +140,12 @@ struct ImageMatchingView: View {
                     // Button to show the target word
                     if !isGameFinished, let word = targetWord {
                         Button(action: {
-                            SpeechViewModel.speak(text: word.baseWord, language: "English")
+                            SpeechViewModel.speak(text: word.translations[langCode]!, language: langCode)
                         }) {
                             HStack(spacing: 8) {
                                 Image(systemName: "speaker.wave.2.fill")
                                     .font(.system(size: 60))
-                                Text(word.baseWord)
+                                Text(word.translations[langCode]!)
                                     .font(.custom("Baloo2-Bold", size: 70))
                             }
                             .padding(.horizontal, 24)
@@ -190,7 +191,7 @@ struct ImageMatchingView: View {
                             cardSize: 300,
                             imageName: word.imageName,
                             withLabel: true,
-                            label: word.baseWord,
+                            label: word.translations[langCode]!,
                             cardColor: colorMap[word.id] ?? .gray
                         )
                         .transition(.scale(scale: 0.5).combined(with: .opacity))
@@ -215,7 +216,7 @@ struct ImageMatchingView: View {
             targetWord = remainingWords.randomElement()
             if let word = targetWord {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    SpeechViewModel.speak(text: word.baseWord, language: "English")            }
+                    SpeechViewModel.speak(text: word.translations[langCode]!, language: langCode)            }
             }
         } else {
             targetWord = nil

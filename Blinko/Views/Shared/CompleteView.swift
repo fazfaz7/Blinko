@@ -27,6 +27,7 @@ struct CompleteView: View {
     @State private var showStar = false
     @State private var showNext = false
     var onExit: () -> Void
+    @AppStorage("selectedLanguage") var langCode: String = "es"
     
     var body: some View {
         GeometryReader { geometry in
@@ -64,12 +65,12 @@ struct CompleteView: View {
                                 cardSize: geometry.size.width * 0.2,
                                 imageName: item.imageName,
                                 label: item.translations[
-                                    "en"]!,
+                                    langCode]!,
                                 cardColor: cardColor
                             ).padding(.horizontal)
                             
                                 .onTapGesture {
-                                    speechViewModel.speak(text: item.translations["en"]!, language: "English")
+                                    speechViewModel.speak(text: item.translations[langCode]!, language: langCode)
                                 }
                             
                         }

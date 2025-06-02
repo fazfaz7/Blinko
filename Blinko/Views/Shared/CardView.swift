@@ -15,7 +15,7 @@ struct CardView: View {
     var cardColor: Color = .pinkBlinko
     var isSilhouette: Bool = false
     var grayCard: Bool = false
-    var language: String = "en"
+    @AppStorage("selectedLanguage") var langCode: String = "es"
     
     var body: some View {
         // We are using dynamic sizing based on cardSize (for now)

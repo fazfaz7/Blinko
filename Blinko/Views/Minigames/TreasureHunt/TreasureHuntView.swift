@@ -59,6 +59,8 @@ struct TreasureHuntView: View {
     // Closure used to go to the next minigame. (Image Matching)
     var onNext: () -> Void
     
+    @AppStorage("selectedLanguage") var langCode: String = "es"
+    
     
 
     var body: some View {
@@ -99,13 +101,13 @@ struct TreasureHuntView: View {
                                     imageName: item.imageName,
                                     label: item.translations[
                                         unlockedItems.contains(
-                                            item.translations["en"] ?? "")
-                                            ? "en" : "it"] ?? "",
+                                            item.baseWord)
+                                            ? langCode : "it"] ?? "",
                                     cardColor: cardColor
                                 )
                                 .grayscale(
                                     unlockedItems.contains(
-                                        item.translations["en"] ?? "") ? 0 : 1
+                                        item.baseWord) ? 0 : 1
                                 )
                                 .onTapGesture {
                                     withAnimation {
@@ -142,7 +144,7 @@ struct TreasureHuntView: View {
                             if viewModel.detectedObject != "none" {
 
                                 if let index = level.words.firstIndex(where: {
-                                    $0.translations["en"]?.lowercased()
+                                    $0.baseWord.lowercased()
                                         == viewModel.detectedObject.lowercased()
                                 }) {
                                     detectedObject = level.words[index]
@@ -203,7 +205,7 @@ struct TreasureHuntView: View {
                             imageName: object.imageName,
                             label: object.translations[
                                 unlockedItems.contains(object.baseWord)
-                                    ? "en" : "it"] ?? "",
+                                    ? langCode : "it"] ?? "",
                             cardColor: colors[clickedObjectIndex],
                             grayCard: unlockedItems.contains(object.baseWord)
                                 ? false : true
@@ -211,16 +213,16 @@ struct TreasureHuntView: View {
                             speechViewModel.speak(
                                 text: object.translations[
                                     unlockedItems.contains(object.baseWord)
-                                        ? "en" : "it"]!,
+                                        ? langCode : "it"]!,
                                 language: unlockedItems.contains(
-                                    object.baseWord) ? "English" : "Italian")
+                                    object.baseWord) ? langCode : "it")
                         }.onAppear {
                             speechViewModel.speak(
                                 text: object.translations[
                                     unlockedItems.contains(object.baseWord)
-                                        ? "en" : "it"]!,
+                                    ? langCode : "it"]!,
                                 language: unlockedItems.contains(
-                                    object.baseWord) ? "English" : "Italian")
+                                    object.baseWord) ? langCode : "it")
                         }
 
                     }
@@ -234,16 +236,16 @@ struct TreasureHuntView: View {
                         CardView(
                             cardSize: 350,
                             imageName: object.imageName,
-                            label: object.translations["en"] ?? "",
+                            label: object.translations[langCode] ?? "",
                             cardColor: colors[detectedObjectIndex]
                         ).onTapGesture {
                             speechViewModel.speak(
-                                text: object.translations["en"]!,
-                                language: "English")
+                                text: object.translations[langCode]!,
+                                language: langCode)
                         }.onAppear {
                             speechViewModel.speak(
-                                text: object.translations["en"]!,
-                                language: "English")
+                                text: object.translations[langCode]!,
+                                language: langCode)
                         }
 
                     }

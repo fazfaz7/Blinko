@@ -11,27 +11,45 @@ struct SelectLevel: View {
     let levels: [Level] = [level1_data, level2_data, level3_data]
     @ObservedObject var userProgress: UserProgress
     @State private var selectedLevel: Level? = nil
+    @State private var showLanguageSheet: Bool = false
 
     var body: some View {
         NavigationStack {
-            HStack {
-                ForEach(Array(levels.enumerated()), id: \.element.id) { idx, level in
-                    let isUnlocked = userProgress.isLevelUnlocked(levelIndex: idx, levels: levels)
-                    
+            
+            VStack {
+                HStack {
+                    Spacer()
                     Button {
-                        if isUnlocked {
-                            selectedLevel = level
-                        }
+                        showLanguageSheet = true
                     } label: {
-                        Text("LEVEL \(idx + 1)")
-                            .foregroundStyle(isUnlocked ? .green : .red)
-                            .padding()
-                            .background(RoundedRectangle(cornerRadius: 8).stroke(isUnlocked ? Color.green : Color.red, lineWidth: 2))
+                        Image(systemName: "gear")
+                            .font(.title)
                     }
-                    .disabled(!isUnlocked)
+                        
+
+                }.padding()
+                Spacer()
+                HStack {
+                    ForEach(Array(levels.enumerated()), id: \.element.id) { idx, level in
+                        let isUnlocked = userProgress.isLevelUnlocked(levelIndex: idx, levels: levels)
+                        
+                        Button {
+                            if isUnlocked {
+                                selectedLevel = level
+                            }
+                        } label: {
+                            Text("LEVEL \(idx + 1)")
+                                .foregroundStyle(isUnlocked ? .green : .red)
+                                .padding()
+                                .background(RoundedRectangle(cornerRadius: 8).stroke(isUnlocked ? Color.green : Color.red, lineWidth: 2))
+                        }
+                        .disabled(!isUnlocked)
+                    }
                 }
-            }
-            .padding()
+                .padding()
+                
+                Spacer()
+            }.padding()
         }
         .fullScreenCover(item: $selectedLevel) { level in
             ChooseMinigameView(
@@ -41,7 +59,10 @@ struct SelectLevel: View {
                 selectedLevel = nil
             }
         }
-        .statusBarHidden() 
+        .sheet(isPresented: $showLanguageSheet, content: {
+            SelectLanguageView()
+        })
+        .statusBarHidden()
     }
 }
 

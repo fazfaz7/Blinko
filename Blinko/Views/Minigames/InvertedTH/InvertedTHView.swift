@@ -45,7 +45,7 @@ struct InvertedTHView: View {
     @State private var showObject: Bool = false
     
     @State private var clickedObject: VocabularyWord? = nil
-    
+    @AppStorage("selectedLanguage") var langCode: String = "es"
    
     
     @ObservedObject var userProgress: UserProgress
@@ -75,8 +75,7 @@ struct InvertedTHView: View {
                         .frame(width: 700)
                         .shadow(
                             color: viewModel.detectedObject.lowercased()
-                                == levelObjects[currentIndex].translations[
-                                    "en"]!
+                            == levelObjects[currentIndex].baseWord
                                 ? .yellow : .clear, radius: 40)
                 }
             }
@@ -92,7 +91,7 @@ struct InvertedTHView: View {
                             viewModel.detectedObject.lowercased()
                                 == levelObjects[
                                     currentIndex
-                                ].translations["en"]!
+                                ].baseWord
                         {
                             lastObjectFound = levelObjects[currentIndex]
                             lastObjectColor = colors[currentIndex]
@@ -139,7 +138,7 @@ struct InvertedTHView: View {
                             CardView(
                                 cardSize: 120,
                                 imageName: item.imageName,
-                                label: item.translations["en"] ?? "",
+                                label: item.translations[langCode] ?? "",
                                 cardColor: colors[index],
                                 isSilhouette: !foundIndexes.contains(index) // Simplified logic
                             )
@@ -180,16 +179,16 @@ struct InvertedTHView: View {
                     CardView(
                         cardSize: 350,
                         imageName: object.imageName,
-                        label: object.translations["en"] ?? "",
+                        label: object.translations[langCode] ?? "",
                         cardColor: lastObjectColor
                     ).onTapGesture {
                         speechViewModel.speak(
-                            text: object.translations["en"]!,
-                            language: "English")
+                            text: object.translations[langCode]!,
+                            language: langCode)
                     }.onAppear {
                         speechViewModel.speak(
-                            text: object.translations["en"]!,
-                            language: "English")
+                            text: object.translations[langCode]!,
+                            language: langCode)
                     }
                     
 
@@ -203,17 +202,17 @@ struct InvertedTHView: View {
                     CardView(
                         cardSize: 350,
                         imageName: object.imageName,
-                        label: object.translations["en"] ?? "",
+                        label: object.translations[langCode] ?? "",
                         isSilhouette: true,
                         grayCard: true
                     ).onTapGesture {
                         speechViewModel.speak(
-                            text: object.translations["en"]!,
-                            language: "English")
+                            text: object.translations[langCode]!,
+                            language: langCode)
                     }.onAppear {
                         speechViewModel.speak(
-                            text: object.translations["en"]!,
-                            language: "English")
+                            text: object.translations[langCode]!,
+                            language: langCode)
                     }
                     
 
@@ -229,7 +228,7 @@ struct InvertedTHView: View {
                         Image(
                             viewModel.detectedObject.lowercased()
                             == levelObjects[currentIndex].translations[
-                                "en"]!
+                                langCode]!
                             ? "Happy" : "Neutral"
                         )
                         .resizable()
