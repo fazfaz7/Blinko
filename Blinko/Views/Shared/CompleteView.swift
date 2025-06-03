@@ -54,23 +54,27 @@ struct CompleteView: View {
                         .animation(.easeOut(duration: 0.8), value: showPlanet)
                     
                 }
-                
-                if showConfetti {
-                    LottieView(filename: "StelleBack", loopMode: .loop)
-                        .allowsHitTesting(false)
-                        .transition(.scale)
-                        .ignoresSafeArea()
-                }
-                
-                VStack {
+                                
+                VStack{
                     Image("luna")
                         .resizable()
                         .scaledToFit()
                         .frame(width: geometry.size.height/2.5)
                         .offset(y: showMoon ? 0 : -geometry.size.height/2)
                         .animation(.easeOut(duration: 0.8), value: showMoon)
-                    
-                    
+                    Spacer()
+                }
+                
+                if showConfetti {
+                    LottieView(filename: "StelleBack", loopMode: .loop, speed: 2)
+                        .allowsHitTesting(false)
+                        .transition(.scale)
+                        .ignoresSafeArea()
+                }
+
+                
+                VStack {
+                    Spacer()
                     HStack {
                         ForEach(0..<4, id: \.self) { index in
                             
@@ -95,6 +99,8 @@ struct CompleteView: View {
                         .opacity(showCards ? 1 : 0)
                         .animation(.easeOut(duration: 0.7), value: showCards)
                     
+                    Spacer()
+                    
                     if showNext {
                         HStack{
                             Spacer()
@@ -105,24 +111,20 @@ struct CompleteView: View {
                                     userProgress.markStageCompleted(.invertedTH, for: level)
                                 }
                             } label: {
-                                HStack(spacing: 8) {
-                                    Text("Next")
-                                        .font(.custom("Baloo2-Bold", size: 32))
-                                }
-                                .padding()
-                                .background(Color.white)
-                                .foregroundColor(.tealBlinko)
-                                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                                .shadow(radius: 5)
-                                .padding(.top,30)
-                                
+                                Image(systemName: "arrow.right.circle.fill")
+                                    .resizable()
+                                    .frame(width: 130, height: 130)
+                                    .foregroundColor(.white)
+                                    .background(Color.tealBlinko)
+                                    .clipShape(Circle())
                             }
                         }
-                        .padding(.trailing, 50)
+                        .padding(50)
+                        .animation(.easeOut(duration: 0.8), value: showNext)
+
                         
                     }
                     
-                    Spacer()
                 }
                 
                 if showStar {
@@ -130,7 +132,7 @@ struct CompleteView: View {
                         Spacer()
                         HStack {
                             
-                            MascotView(mood: mascotMood, width: 350, height: 350)
+                            MascotView(mood: mascotMood, width: 350, height: 350, jump: true)
                                 .offset(x:0, y:40)
                             
                         }
@@ -151,16 +153,16 @@ struct CompleteView: View {
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                     withAnimation(.easeOut(duration: 0.7)) {
-                        showCards = true
+                        showStar = true
+                        showConfetti = true
                     }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        withAnimation(.spring(response: 0.6, dampingFraction: 0.6)) {
-                            showStar = true
-                            showConfetti = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            showCards = true
+                            showNext = true
                         }
                         DispatchQueue.main.asyncAfter(deadline: .now()+1) {
                             withAnimation {
-                                showNext = true
                             }
                         }
                     }
