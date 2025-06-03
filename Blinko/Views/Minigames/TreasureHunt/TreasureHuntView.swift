@@ -211,6 +211,8 @@ struct TreasureHuntView: View {
                 }
                 
                 
+                // When we tap on a card on the left we show this:
+                
                 if showObject {
                     
                     if let object = clickedObject {
@@ -247,7 +249,7 @@ struct TreasureHuntView: View {
                     
                 }
                 
-                // If the variable showObjectFound is true, then we show the card in a big size along with its pronunciation.
+                // If the variable showObjectFound is true, then we show the card in a big size along with its pronunciation and the mascot speaking.
                 if showObjectFound {
                     
                     if let object = detectedObject {

@@ -143,17 +143,24 @@ struct ChooseMinigameView: View {
                             }
                             selectedStage = stages[i]
                         } label: {
-                            Image("minigame_planet\(planetNumbers[idx])")
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .frame(width: 190)
-                                                    .scaleEffect(localPulsing[i] ? 1.06 : 0.95)
-                                                    .animation(
-                                                        localPulsing[i]
-                                                        ? .easeInOut(duration: 1.1).repeatForever(autoreverses: true)
-                                                        : .default,
-                                                        value: localPulsing[i]
-                                                    )
+                            PulsingPlanetView(
+                                imageName: "minigame_planet\(planetNumbers[idx])",
+                                color: .white,
+                                pulse: isPulsing
+                            )
+                            .frame(width: 190)
+                            
+//                            Image("minigame_planet\(planetNumbers[idx])")
+//                                                    .resizable()
+//                                                    .scaledToFit()
+//                                                    .frame(width: 190)
+//                                                    .scaleEffect(localPulsing[i] ? 1.26 : 0.95)
+//                                                    .animation(
+//                                                        localPulsing[i]
+//                                                        ? .easeInOut(duration: 1).repeatForever(autoreverses: true)
+//                                                        : .default,
+//                                                        value: localPulsing[i]
+//                                                    )
                         }
                         .position(pos)
                         .onAppear {
@@ -276,7 +283,11 @@ struct ChooseMinigameView: View {
 
 #Preview {
     // Preview with example planet numbers
-   // ChooseMinigameView(planetNumbers: [1, 4, 5])
+    ChooseMinigameView(
+        level: level1_data,
+        userProgress: UserProgress(),
+        onClose: {}
+    )
 }
 
 
