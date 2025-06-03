@@ -27,6 +27,9 @@ struct CompleteView: View {
     @State private var showStar = false
     @State private var showNext = false
     @State private var showConfetti = false
+    
+    @State private var mascotMood: MascotMood = .happy
+    
     var onExit: () -> Void
     @AppStorage("selectedLanguage") var langCode: String = "es"
     
@@ -37,6 +40,7 @@ struct CompleteView: View {
                 
                 VStack {
                     Spacer()
+                    
                     Image("BluePlanet")
                         .resizable()
                         .scaledToFit()
@@ -88,41 +92,46 @@ struct CompleteView: View {
                         .animation(.easeOut(duration: 0.7), value: showCards)
                     
                     if showNext {
-                        
-                        Button {
-                            onExit()
-                        } label: {
-                            HStack(spacing: 8) {
-                                Text("Next")
-                                    .font(.custom("Baloo2-Bold", size: 28))
-                            }
-                            .padding()
-                            .background(Color.white)
-                            .foregroundColor(.tealBlinko)
-                            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                            .shadow(radius: 5)
-                            .padding(.top,30)
+                        HStack{
+                            Spacer()
                             
+                            Button {
+                                onExit()
+                            } label: {
+                                HStack(spacing: 8) {
+                                    Text("Next")
+                                        .font(.custom("Baloo2-Bold", size: 32))
+                                }
+                                .padding()
+                                .background(Color.white)
+                                .foregroundColor(.tealBlinko)
+                                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                                .shadow(radius: 5)
+                                .padding(.top,30)
+                                
+                            }
                         }
+                        .padding(.trailing, 50)
+                        
                     }
+                    
                     Spacer()
                 }
                 
-
+                if showStar {
+                    VStack {
                         Spacer()
+                        HStack {
+                            
+                            MascotView(mood: mascotMood, width: 350, height: 350)
+                                .offset(x:0, y:40)
+                            
+                        }
+                    }
+                    .ignoresSafeArea()
+                }
                 
-                        Image("happy_blinko")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: geometry.size.width/2)
-                            .offset(
-                                    x: geometry.size.width/2.5,
-                                    y: showStar ? geometry.size.height/3 : geometry.size.height * 1.2
-                                )
-                            .opacity(showStar ? 1 : 0)
-                               .animation(.spring(response: 0.6, dampingFraction: 0.6), value: showStar)
-                 
-                   
+                
             }.ignoresSafeArea()
         }.onAppear {
             // Sequence: moon -> planet -> cards -> star
@@ -151,7 +160,7 @@ struct CompleteView: View {
                 }
             }
         }
-
+        
     }
 }
 

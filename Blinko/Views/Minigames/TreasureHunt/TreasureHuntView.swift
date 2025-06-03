@@ -46,6 +46,9 @@ struct TreasureHuntView: View {
 
     @State private var clickedObject: VocabularyWord? = nil
     @State private var clickedObjectIndex: Int = 0
+    
+    // To change mascot mood
+    @State private var mascotMood: MascotMood = .happy
 
     // Speech View Model to handle the speech-to-text feature.
     @StateObject private var speechViewModel = TextToSpeechViewModel(
@@ -183,19 +186,17 @@ struct TreasureHuntView: View {
                     }
 
                     // Blinko in the right bottom part of the screen!
+                    
                     VStack {
                         Spacer()
                         HStack {
                             Spacer()
-                            Image(
-                                viewModel.detectedObject != "none"
-                                    ? "Happy" : "Neutral"
-                            )
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 300)
+                            MascotView(mood: viewModel.detectedObject != "none" ? .wow : .normal, width: 400, height: 400)
+                                .offset(x:35, y: 30)
                         }
                     }
+                    .ignoresSafeArea()
+                    
                 }
                 
                 if showObject || showObjectFound {
