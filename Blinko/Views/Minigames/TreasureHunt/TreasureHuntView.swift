@@ -50,9 +50,6 @@ struct TreasureHuntView: View {
     // To change mascot mood
     @State private var mascotMood: MascotMood = .happy
     
-    // Variable to check if the speech-to-text is going on
-    @State private var isSpeaking = false
-    
     // Speech View Model to handle the speech-to-text feature.
     @StateObject private var speechViewModel = TextToSpeechViewModel(
         textToSpeechService: TextToSpeechService())
@@ -254,49 +251,61 @@ struct TreasureHuntView: View {
                 if showObjectFound {
                     
                     if let object = detectedObject {
-                        CardView(
-                            cardSize: 350,
-                            imageName: object.imageName,
-                            label: object.translations[langCode] ?? "",
-                            cardColor: colors[detectedObjectIndex]
-                        ).onTapGesture {
-                            speechViewModel.speak(
-                                text: object.translations[langCode]!,
-                                language: langCode)
-                        }.onAppear {
-                            speechViewModel.speak(
-                                text: object.translations[langCode]!,
-                                language: langCode)
+                        
+                            CardView(
+                                cardSize: 350,
+                                imageName: object.imageName,
+                                label: object.translations[langCode] ?? "",
+                                cardColor: colors[detectedObjectIndex]
+                            ).onTapGesture {
+                                speechViewModel.speak(
+                                    text: object.translations[langCode]!,
+                                    language: langCode)
+                            }
+                            
+                        HStack{
+                            Spacer()
+                            Button(action: {
+                                withAnimation {
+                                    showObjectFound = false
+                                }
+                            }) {
+                                Image(systemName: "arrow.right.circle.fill")
+                                    .resizable()
+                                    .frame(width: 130, height: 130)
+                                    .foregroundColor(.white)
+                                    .background(Color.tealBlinko)
+                                    .clipShape(Circle())
+                                    .padding(.trailing, 60)
+
+                                    
+                            }
+                            .padding()
+
                         }
+                            
+                        
                         
                         VStack {
                             Spacer()
                             HStack {
                                 MascotView(
-                                    mood: isSpeaking ? .wow : .normal,
-                                    width: isSpeaking ? 420 : 300,
-                                    height: isSpeaking ? 420 : 300
+                                    mood: speechViewModel.isSpeaking ? .wow : .normal,
+                                    width: speechViewModel.isSpeaking ? 420 : 300,
+                                    height: speechViewModel.isSpeaking ? 420 : 300
                                 )
-                                .animation(.easeInOut(duration: 0.1), value: isSpeaking)
+                                .animation(.easeInOut(duration: 0.1), value: speechViewModel.isSpeaking)
                                 .onTapGesture {
-                                    isSpeaking = true
                                     speechViewModel.speak(
                                         text: object.translations[langCode]!,
                                         language: langCode
                                     )
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                                        isSpeaking = false
-                                    }
                                 }
                                 .onAppear {
-                                    isSpeaking = true
                                     speechViewModel.speak(
                                         text: object.translations[langCode]!,
                                         language: langCode
                                     )
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                                        isSpeaking = false
-                                    }
                                 }
 
                                 Spacer()
@@ -306,11 +315,8 @@ struct TreasureHuntView: View {
                         .ignoresSafeArea()
                         
                     }
-                    
-                    
                 }
-                
-                
+
                 
                 if unlockedItems.count == 4 && showObjectFound != true {
                     
@@ -322,7 +328,7 @@ struct TreasureHuntView: View {
                 .onTapGesture {
                     
                     showObject = false
-                    showObjectFound = false
+                    //showObjectFound = false
                     
                 }
                 .onDisappear {

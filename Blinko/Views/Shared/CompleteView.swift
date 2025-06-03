@@ -62,7 +62,7 @@ struct CompleteView: View {
                 }
                 
                 if showConfetti {
-                    LottieView(filename: "StelleBack", loopMode: .loop)
+                    LottieView(filename: "StelleBack", loopMode: .loop, speed: 2)
                         .allowsHitTesting(false)
                         .transition(.scale)
                         .ignoresSafeArea()
@@ -127,7 +127,7 @@ struct CompleteView: View {
                         Spacer()
                         HStack {
                             
-                            MascotView(mood: mascotMood, width: 350, height: 350)
+                            MascotView(mood: mascotMood, width: 350, height: 350, jump: true)
                                 .offset(x:0, y:40)
                             
                         }
@@ -148,14 +148,13 @@ struct CompleteView: View {
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                     withAnimation(.easeOut(duration: 0.7)) {
-                        showCards = true
-                        showNext = true
-
+                        showStar = true
+                        showConfetti = true
                     }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        withAnimation(.spring(response: 0.6, dampingFraction: 0.6)) {
-                            showStar = true
-                            showConfetti = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            showCards = true
+                            showNext = true
                         }
                         DispatchQueue.main.asyncAfter(deadline: .now()+1) {
                             withAnimation {
