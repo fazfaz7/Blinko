@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SelectLevel: View {
-    let levels: [Level] = [level1_data, level2_data, level3_data]
+    let levels: [Level] = [level1_data, level2_data, level3_data, level4_data, level5_data]
     @ObservedObject var userProgress: UserProgress
     @State private var selectedLevel: Level? = nil
     @State private var showLanguageSheet: Bool = false
