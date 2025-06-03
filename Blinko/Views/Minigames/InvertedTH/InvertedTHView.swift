@@ -48,9 +48,8 @@ struct InvertedTHView: View {
     @AppStorage("selectedLanguage") var langCode: String = "es"
    
     
-    @ObservedObject var userProgress: UserProgress
-    
     var onNext: () -> Void
+    @ObservedObject var userProgress: UserProgress
     
     init(level: Level, userProgress: UserProgress, onNext: @escaping () -> Void ) {
         self.level = level
@@ -245,10 +244,10 @@ struct InvertedTHView: View {
                 }}
 
             if foundIndexes.count == 4 && !showObjectFound {
-                CompleteView(level: level, onExit: onNext)
+                CompleteView(level: level, userProgress: userProgress, onExit: onNext, lastMinigame: true)
                     .onAppear{
                         viewModel.cameraManager.stopSession()
-                        userProgress.markStageCompleted(.invertedTH, for: level)
+
                         
                     }
                

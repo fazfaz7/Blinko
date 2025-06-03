@@ -43,6 +43,8 @@ struct StarMapView: View {
 
     let localPulsing: [Bool]
     
+    @Binding var pathAnim: [CGFloat] // Changed from @State to @Binding
+    
     var onLevelSelect: (Int) -> Void
     
     var body: some View {
@@ -57,11 +59,15 @@ struct StarMapView: View {
                                     let from = CGPoint(x: star.position.x * geo.size.width,
                                                        y: star.position.y * geo.size.height)
                                     let to = CGPoint(x: target.position.x * geo.size.width,
-                                                     y: target.position.y * geo.size.height)
+                                                   y: target.position.y * geo.size.height)
                                     path.move(to: from)
                                     path.addLine(to: to)
                                 }
-                                .stroke(Color.white, lineWidth: 3)
+                                .trim(from: 0, to: pathAnim[star.id]) // Use the corresponding pathAnim index
+                                .stroke(
+                                    style: StrokeStyle(lineWidth: 3, lineCap: .round, dash: [10, 5])
+                                )
+                                .foregroundColor(.white)
                                 .zIndex(-1)
                             }
                         }
@@ -124,6 +130,8 @@ struct LevelSelectionView: View {
     
     @State private var localPulsing: [Bool] = [false, false, false, false, false]
     
+    @State private var pathAnim: [CGFloat] = [0, 0, 0, 0]
+    
     // Unlocked up to the highest level the user has unlocked
     private var unlockedUpTo: Int {
         var highestUnlocked = 0
@@ -158,7 +166,8 @@ struct LevelSelectionView: View {
                     stars: stars,
                     currentLevel: currentLevel,
                     unlockedUpTo: unlockedUpTo,
-                    localPulsing: localPulsing // ← ADD THIS!
+                    localPulsing: localPulsing,// ← ADD THIS!
+                    pathAnim: $pathAnim // Pass the binding
                 ) { selectedID in
                     currentLevel = selectedID
                     selectedLevel = levels[selectedID]
@@ -166,11 +175,24 @@ struct LevelSelectionView: View {
                     .padding()
                     
                 
-            }
-            .onAppear { updatePulsingStates() } // <<-- Add this
-               .onChange(of: currentLevel) { _, _ in
+            }.ignoresSafeArea()
+               .onAppear {
                    updatePulsingStates()
-               } // <<-- Add this
+                   DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                       animateProgressLines()
+                   }
+               }
+               .onChange(of: currentLevel) {
+                   updatePulsingStates()
+                   DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                       animateProgressLines()
+                   }
+               }
+               .onChange(of: unlockedUpTo) {
+                   DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                       animateProgressLines()
+                   }
+               }
         }
         .fullScreenCover(item: $selectedLevel) { level in
             ChooseMinigameView(
@@ -186,6 +208,24 @@ struct LevelSelectionView: View {
     
     private func updatePulsingStates() {
         localPulsing = stars.indices.map { $0 == currentLevel }
+    }
+    
+    private func animateProgressLines() {
+        // For each connection, if both stars are unlocked, animate the line
+        for i in 0..<4 { // We have 4 connections between 5 stars
+            let starID = i
+            let isUnlocked = starID <= unlockedUpTo && (starID + 1) <= unlockedUpTo
+            
+            if isUnlocked && pathAnim[i] < 1 {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    withAnimation(.easeOut(duration: 1.2)) {
+                        pathAnim[i] = 1
+                    }
+                }
+            } else if !isUnlocked {
+                pathAnim[i] = 0 // Reset if not unlocked
+            }
+        }
     }
 
 }

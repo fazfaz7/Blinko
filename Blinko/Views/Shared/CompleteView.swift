@@ -29,8 +29,12 @@ struct CompleteView: View {
     @State private var showConfetti = false
     
     @State private var mascotMood: MascotMood = .happy
-    
+   
+    @ObservedObject var userProgress: UserProgress
     var onExit: () -> Void
+    
+    
+    var lastMinigame: Bool = false
     @AppStorage("selectedLanguage") var langCode: String = "es"
     
     var body: some View {
@@ -97,6 +101,9 @@ struct CompleteView: View {
                             
                             Button {
                                 onExit()
+                                if lastMinigame {
+                                    userProgress.markStageCompleted(.invertedTH, for: level)
+                                }
                             } label: {
                                 HStack(spacing: 8) {
                                     Text("Next")
@@ -165,5 +172,5 @@ struct CompleteView: View {
 }
 
 #Preview {
-    CompleteView(onExit: {})
+    CompleteView(level: level1_data,  userProgress: UserProgress(), onExit: {})
 }

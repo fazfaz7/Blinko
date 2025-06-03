@@ -61,7 +61,7 @@ struct ImageMatchingView: View {
     var body: some View {
         
         if isGameFinished {
-            CompleteView(level: level) {
+            CompleteView(level: level, userProgress: userProgress) {
                     userProgress.markStageCompleted(.memoryGame, for: level)
                     onNext()
                 

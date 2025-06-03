@@ -39,12 +39,15 @@ struct ChooseMinigameView: View {
 
     let stages: [GameStage] = [.treasureHunt, .memoryGame, .invertedTH]
     
+    
     private var pulsingIndex: Int? {
             let progress = userProgress.levelsProgress[level.id] ?? LevelProgress(levelID: level.id)
             return progress.firstIncompleteStage().flatMap { stages.firstIndex(of: $0) }
         }
     
     @State private var pathAnim: [CGFloat] = [0, 0] // For 2 lines between 3 planets
+    
+
 
 
     var body: some View {
@@ -237,6 +240,9 @@ struct ChooseMinigameView: View {
         case .invertedTH:
             InvertedTHView(level: level, userProgress: userProgress) {
                 selectedStage = nil
+                DispatchQueue.main.asyncAfter(deadline: .now()+0.2){
+                    onClose()
+                }
             }
         }
     }
