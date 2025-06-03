@@ -95,6 +95,8 @@ struct CompleteView: View {
                         .opacity(showCards ? 1 : 0)
                         .animation(.easeOut(duration: 0.7), value: showCards)
                     
+                    Spacer()
+                    
                     if showNext {
                         HStack{
                             Spacer()
@@ -102,24 +104,20 @@ struct CompleteView: View {
                             Button {
                                 onExit()
                             } label: {
-                                HStack(spacing: 8) {
-                                    Text("Next")
-                                        .font(.custom("Baloo2-Bold", size: 32))
-                                }
-                                .padding()
-                                .background(Color.white)
-                                .foregroundColor(.tealBlinko)
-                                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                                .shadow(radius: 5)
-                                .padding(.top,30)
-                                
+                                Image(systemName: "arrow.right.circle.fill")
+                                    .resizable()
+                                    .frame(width: 130, height: 130)
+                                    .foregroundColor(.white)
+                                    .background(Color.tealBlinko)
+                                    .clipShape(Circle())
                             }
                         }
-                        .padding(.trailing, 50)
+                        .padding(50)
+                        .animation(.easeOut(duration: 0.8), value: showNext)
+
                         
                     }
                     
-                    Spacer()
                 }
                 
                 if showStar {
