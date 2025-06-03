@@ -24,7 +24,7 @@ struct TreasureHuntView: View {
     @State private var showSheet: Bool = false
     
     // Detected Object variable that holds a VocabularyWord object. It is nil whenever nothing is found.
-    @State private var detectedObject: VocabularyWord? = nil //VocabularyWord(baseWord: "pencil", imageName: "pencil", translations: ["en": "pencil", "es": "lápiz", "it": "matita"])
+    @State private var detectedObject: VocabularyWord? =  VocabularyWord(baseWord: "pencil", imageName: "pencil", translations: ["en": "pencil", "es": "lápiz", "it": "matita"])
     
     // Index of the detected object in relation to its position in the array. It is used to know the color of the card when displaying it.
     @State private var detectedObjectIndex: Int = 0
@@ -39,7 +39,7 @@ struct TreasureHuntView: View {
     let colorCounter: Int = 0
     
     // Control variable that displays the card whenever the user finds an object.
-    @State private var showObjectFound: Bool = false
+    @State private var showObjectFound: Bool = true
     
     // Control variable that displays the card whenever the user finds an object.
     @State private var showObject: Bool = false
@@ -264,26 +264,29 @@ struct TreasureHuntView: View {
                                     text: object.translations[langCode]!,
                                     language: langCode)
                             }
-                            
-                        HStack{
+                        
+                        VStack{
                             Spacer()
-                            Button(action: {
-                                withAnimation {
-                                    showObjectFound = false
-                                }
-                            }) {
-                                Image(systemName: "arrow.right.circle.fill")
-                                    .resizable()
-                                    .frame(width: 130, height: 130)
-                                    .foregroundColor(.white)
-                                    .background(Color.tealBlinko)
-                                    .clipShape(Circle())
-                                    .padding(.trailing, 60)
-
+                            HStack{
+                                Spacer()
+                                Button(action: {
+                                    withAnimation {
+                                        showObjectFound = false
+                                    }
+                                }) {
+                                    Image(systemName: "arrow.right.circle.fill")
+                                        .resizable()
+                                        .frame(width: 130, height: 130)
+                                        .foregroundColor(.white)
+                                        .background(Color.tealBlinko)
+                                        .clipShape(Circle())
+                                        .padding(50)
                                     
+                                    
+                                }
+                                .padding()
+                                
                             }
-                            .padding()
-
                         }
                             
                         
@@ -293,8 +296,8 @@ struct TreasureHuntView: View {
                             HStack {
                                 MascotView(
                                     mood: speechViewModel.isSpeaking ? .wow : .normal,
-                                    width: speechViewModel.isSpeaking ? 420 : 300,
-                                    height: speechViewModel.isSpeaking ? 420 : 300
+                                    width: speechViewModel.isSpeaking ? 400 : 300,
+                                    height: speechViewModel.isSpeaking ? 400 : 300
                                 )
                                 .animation(.easeInOut(duration: 0.1), value: speechViewModel.isSpeaking)
                                 .onTapGesture {
@@ -314,6 +317,7 @@ struct TreasureHuntView: View {
                                 
                             }
                         }
+                        .padding()
                         .ignoresSafeArea()
                         
                     }
