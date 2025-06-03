@@ -75,7 +75,7 @@ struct ImageMatchingView: View {
                     .rotationEffect(rotation1)
                     .offset(x: -500, y: -500)
                     .onAppear {
-                        withAnimation(Animation.linear(duration: 60).repeatForever(autoreverses: false)) {
+                        withAnimation(Animation.linear(duration: 45).repeatForever(autoreverses: false)) {
                             rotation1 = .degrees(360)
                         }
                     }
@@ -86,7 +86,7 @@ struct ImageMatchingView: View {
                     .rotationEffect(rotation2)
                     .offset(x: 550, y: 500)
                     .onAppear {
-                        withAnimation(Animation.linear(duration: 180).repeatForever(autoreverses: false)) {
+                        withAnimation(Animation.linear(duration: 120).repeatForever(autoreverses: false)) {
                             rotation2 = .degrees(360)
                         }
                     }
@@ -103,7 +103,7 @@ struct ImageMatchingView: View {
                             CardView(
                                 cardSize: 240,
                                 imageName: word.imageName,
-                                withLabel: true,
+                                withLabel: false,
                                 label: word.translations[langCode]!,
                                 cardColor: color
                             )

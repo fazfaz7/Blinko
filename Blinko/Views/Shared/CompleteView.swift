@@ -50,6 +50,16 @@ struct CompleteView: View {
                         .animation(.easeOut(duration: 0.8), value: showPlanet)
                     
                 }
+                                
+                VStack{
+                    Image("luna")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: geometry.size.height/2.5)
+                        .offset(y: showMoon ? 0 : -geometry.size.height/2)
+                        .animation(.easeOut(duration: 0.8), value: showMoon)
+                    Spacer()
+                }
                 
                 if showConfetti {
                     LottieView(filename: "StelleBack", loopMode: .loop)
@@ -57,16 +67,10 @@ struct CompleteView: View {
                         .transition(.scale)
                         .ignoresSafeArea()
                 }
+
                 
                 VStack {
-                    Image("luna")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: geometry.size.height/2.5)
-                        .offset(y: showMoon ? 0 : -geometry.size.height/2)
-                        .animation(.easeOut(duration: 0.8), value: showMoon)
-                    
-                    
+                    Spacer()
                     HStack {
                         ForEach(0..<4, id: \.self) { index in
                             
@@ -145,6 +149,8 @@ struct CompleteView: View {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                     withAnimation(.easeOut(duration: 0.7)) {
                         showCards = true
+                        showNext = true
+
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         withAnimation(.spring(response: 0.6, dampingFraction: 0.6)) {
@@ -153,7 +159,6 @@ struct CompleteView: View {
                         }
                         DispatchQueue.main.asyncAfter(deadline: .now()+1) {
                             withAnimation {
-                                showNext = true
                             }
                         }
                     }
