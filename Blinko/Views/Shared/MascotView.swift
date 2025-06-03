@@ -23,6 +23,7 @@ struct MascotView: View {
     var mood: MascotMood
     var width: CGFloat = 300
     var height: CGFloat = 300
+    var jump: Bool = false
 
     @State private var offset: CGFloat = 0
     @State private var isJumping = false
@@ -44,7 +45,7 @@ struct MascotView: View {
     private func handleMoodChange() {
         idleTimer?.invalidate()
 
-        if mood == .happy {
+        if jump == true {
             startJumping(repeating: true)
         } else if mood == .normal {
             startIdleBounce()
@@ -57,7 +58,7 @@ struct MascotView: View {
 
         Timer.scheduledTimer(withTimeInterval: 0.3, repeats: repeating) { timer in
             bounce()
-            if !repeating || mood != .happy {
+            if !repeating {
                 timer.invalidate()
                 isJumping = false
             }
@@ -65,7 +66,7 @@ struct MascotView: View {
     }
 
     private func startIdleBounce() {
-        idleTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
+        idleTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { _ in
             bounce()
         }
     }

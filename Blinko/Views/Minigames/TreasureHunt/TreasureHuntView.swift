@@ -19,44 +19,49 @@ struct TreasureHuntView: View {
     }
     
     
-
+    
     // Control variable to show the sheet whenever the user discovers an object.
     @State private var showSheet: Bool = false
-
+    
     // Detected Object variable that holds a VocabularyWord object. It is nil whenever nothing is found.
-    @State private var detectedObject: VocabularyWord? = nil
-
+    @State private var detectedObject: VocabularyWord? = nil //VocabularyWord(baseWord: "pencil", imageName: "pencil", translations: ["en": "pencil", "es": "lápiz", "it": "matita"])
+    
     // Index of the detected object in relation to its position in the array. It is used to know the color of the card when displaying it.
     @State private var detectedObjectIndex: Int = 0
-
+    
     // Set of the objects that have already been unlocked.
     @State private var unlockedItems: Set<String> = []
-
+    
     // Colors for the cards
     let colors: [Color] = [
         .orangeBlinko, .pinkBlinko, .lilaBlinko, .purpleBlinko,
     ]
     let colorCounter: Int = 0
-
+    
     // Control variable that displays the card whenever the user finds an object.
     @State private var showObjectFound: Bool = false
-
+    
     // Control variable that displays the card whenever the user finds an object.
     @State private var showObject: Bool = false
-
+    
     @State private var clickedObject: VocabularyWord? = nil
     @State private var clickedObjectIndex: Int = 0
     
     // To change mascot mood
     @State private var mascotMood: MascotMood = .happy
-
+    
+    // Variable to check if the speech-to-text is going on
+    @State private var isSpeaking = false
+    
     // Speech View Model to handle the speech-to-text feature.
     @StateObject private var speechViewModel = TextToSpeechViewModel(
         textToSpeechService: TextToSpeechService())
-
+    
+    
+    
     // Current level
     var level: Level = level1_data
-   
+    
     @ObservedObject var userProgress: UserProgress
     
     // Closure used to go to the next minigame. (Image Matching)
@@ -65,12 +70,12 @@ struct TreasureHuntView: View {
     @AppStorage("selectedLanguage") var langCode: String = "es"
     
     
-
+    
     var body: some View {
         GeometryReader { geometry in
-
+            
             ZStack {
-               
+                
                 
                 // View of the Camera, behind everything.
                 CameraView(image: $viewModel.currentFrame)
@@ -80,24 +85,24 @@ struct TreasureHuntView: View {
                     
                     CompleteView(level: level, onExit: {
                         viewModel.cameraManager.stopSession()
-                                userProgress.markStageCompleted(.treasureHunt, for: level)
+                        userProgress.markStageCompleted(.treasureHunt, for: level)
                         onNext()
                         
                     })
                     
-
+                    
                 }
                 
-      
+                
                 if !showObject && !showObjectFound && unlockedItems.count != 4 {
                     // 4 objects on the left of the screen.
                     HStack {
                         VStack {
                             ForEach(0..<4, id: \.self) { index in
-
+                                
                                 let item = level.words[index]
                                 let cardColor = colors[index]
-
+                                
                                 Spacer()
                                 CardView(
                                     cardSize: geometry.size.width * 0.1,
@@ -105,7 +110,7 @@ struct TreasureHuntView: View {
                                     label: item.translations[
                                         unlockedItems.contains(
                                             item.baseWord)
-                                            ? langCode : "it"] ?? "",
+                                        ? langCode : "it"] ?? "",
                                     cardColor: cardColor
                                 )
                                 .grayscale(
@@ -118,37 +123,37 @@ struct TreasureHuntView: View {
                                         clickedObjectIndex = index
                                         showObject = true
                                     }
-
+                                    
                                 }
-
+                                
                             }
                         }
                         .frame(maxHeight: .infinity)
                         .padding(geometry.size.width * 0.02)
                         Spacer()
                     }
-
+                    
                     VStack {
                         Image("ScannerImage")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 700)
-                            // The image glows if the user is detecting something.
+                        // The image glows if the user is detecting something.
                             .shadow(
                                 color: viewModel.detectedObject != "none"
-                                    ? .yellow : .clear, radius: 40)
+                                ? .yellow : .clear, radius: 40)
                     }
-
+                    
                     HStack {
                         Spacer()
-
+                        
                         // Button to capture the object found. Disabled if the user is not finding anything.
                         Button {
                             if viewModel.detectedObject != "none" {
-
+                                
                                 if let index = level.words.firstIndex(where: {
                                     $0.baseWord.lowercased()
-                                        == viewModel.detectedObject.lowercased()
+                                    == viewModel.detectedObject.lowercased()
                                 }) {
                                     detectedObject = level.words[index]
                                     detectedObjectIndex = index
@@ -160,38 +165,41 @@ struct TreasureHuntView: View {
                                     }
                                 }
                             }
-
+                            
                         } label: {
                             ZStack {
-
+                                
                                 Circle()
                                     .fill(.white)
                                     .frame(width: 110)
                                     .padding(25)
-
+                                
                                 Circle()
                                     .fill(.black)
                                     .frame(width: 100)
                                     .padding(25)
-
+                                
                                 Circle()
                                     .fill(.white)
                                     .frame(width: 90)
                                     .padding(25)
-
+                                
                             }
                         }
-
+                        
                         
                     }
-
+                    
                     // Blinko in the right bottom part of the screen!
                     
                     VStack {
                         Spacer()
                         HStack {
                             Spacer()
-                            MascotView(mood: viewModel.detectedObject != "none" ? .wow : .normal, width: 400, height: 400)
+                            MascotView(mood: viewModel.detectedObject != "none" ? .wow : .normal,
+                                       width: viewModel.detectedObject != "none" ? 420 : 350,
+                                       height: viewModel.detectedObject != "none" ? 420 : 350)
+                            .animation(.easeInOut(duration: 0.1), value: viewModel.detectedObject)
                                 .offset(x:35, y: 30)
                         }
                     }
@@ -200,29 +208,29 @@ struct TreasureHuntView: View {
                 }
                 
                 if showObject || showObjectFound {
-                      Color.black.opacity(0.4)
-                          .ignoresSafeArea()
-                          .transition(.opacity)
-                  }
-
-
+                    Color.black.opacity(0.4)
+                        .ignoresSafeArea()
+                        .transition(.opacity)
+                }
+                
+                
                 if showObject {
-
+                    
                     if let object = clickedObject {
                         CardView(
                             cardSize: 350,
                             imageName: object.imageName,
                             label: object.translations[
                                 unlockedItems.contains(object.baseWord)
-                                    ? langCode : "it"] ?? "",
+                                ? langCode : "it"] ?? "",
                             cardColor: colors[clickedObjectIndex],
                             grayCard: unlockedItems.contains(object.baseWord)
-                                ? false : true
+                            ? false : true
                         ).onTapGesture {
                             speechViewModel.speak(
                                 text: object.translations[
                                     unlockedItems.contains(object.baseWord)
-                                        ? langCode : "it"]!,
+                                    ? langCode : "it"]!,
                                 language: unlockedItems.contains(
                                     object.baseWord) ? langCode : "it")
                         }.onAppear {
@@ -237,14 +245,14 @@ struct TreasureHuntView: View {
                         }
                         
                         .transition(.scale(scale: 0.5).combined(with: .opacity))
-
+                        
                     }
-
+                    
                 }
-
-                // If the variable showObject is true, then we show the card in a big size along with its pronunciation.
+                
+                // If the variable showObjectFound is true, then we show the card in a big size along with its pronunciation.
                 if showObjectFound {
-
+                    
                     if let object = detectedObject {
                         CardView(
                             cardSize: 350,
@@ -260,31 +268,68 @@ struct TreasureHuntView: View {
                                 text: object.translations[langCode]!,
                                 language: langCode)
                         }
+                        
+                        VStack {
+                            Spacer()
+                            HStack {
+                                MascotView(
+                                    mood: isSpeaking ? .wow : .normal,
+                                    width: isSpeaking ? 420 : 300,
+                                    height: isSpeaking ? 420 : 300
+                                )
+                                .animation(.easeInOut(duration: 0.1), value: isSpeaking)
+                                .onTapGesture {
+                                    isSpeaking = true
+                                    speechViewModel.speak(
+                                        text: object.translations[langCode]!,
+                                        language: langCode
+                                    )
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                        isSpeaking = false
+                                    }
+                                }
+                                .onAppear {
+                                    isSpeaking = true
+                                    speechViewModel.speak(
+                                        text: object.translations[langCode]!,
+                                        language: langCode
+                                    )
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                        isSpeaking = false
+                                    }
+                                }
 
+                                Spacer()
+                                
+                            }
+                        }
+                        .ignoresSafeArea()
+                        
                     }
-
+                    
+                    
                 }
-
+                
                 
                 
                 if unlockedItems.count == 4 && showObjectFound != true {
                     
                 }
                 
-
+                
             }.ignoresSafeArea()
-                // Sheet with the data of the detected object that comes up when the user clicks on the camera.
+            // Sheet with the data of the detected object that comes up when the user clicks on the camera.
                 .onTapGesture {
                     
-                        showObject = false
-                        showObjectFound = false
+                    showObject = false
+                    showObjectFound = false
                     
                 }
                 .onDisappear {
                     viewModel.cameraManager.stopSession()
                 }
-        }.statusBarHidden() 
-
+        }.statusBarHidden()
+        
     }
 }
 
