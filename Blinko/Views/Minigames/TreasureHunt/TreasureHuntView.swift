@@ -24,7 +24,7 @@ struct TreasureHuntView: View {
     @State private var showSheet: Bool = false
     
     // Detected Object variable that holds a VocabularyWord object. It is nil whenever nothing is found.
-    @State private var detectedObject: VocabularyWord? =  VocabularyWord(baseWord: "pencil", imageName: "pencil", translations: ["en": "pencil", "es": "lápiz", "it": "matita"])
+    @State private var detectedObject: VocabularyWord? = nil //VocabularyWord(baseWord: "pencil", imageName: "pencil", translations: ["en": "pencil", "es": "lápiz", "it": "matita"])
     
     // Index of the detected object in relation to its position in the array. It is used to know the color of the card when displaying it.
     @State private var detectedObjectIndex: Int = 0
@@ -39,7 +39,7 @@ struct TreasureHuntView: View {
     let colorCounter: Int = 0
     
     // Control variable that displays the card whenever the user finds an object.
-    @State private var showObjectFound: Bool = true
+    @State private var showObjectFound: Bool = false
     
     // Control variable that displays the card whenever the user finds an object.
     @State private var showObject: Bool = false
