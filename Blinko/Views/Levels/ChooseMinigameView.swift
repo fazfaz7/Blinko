@@ -146,25 +146,19 @@ struct ChooseMinigameView: View {
                             }
                             selectedStage = stages[i]
                         } label: {
-                            PulsingPlanetView(
-                                imageName: "minigame_planet\(planetNumbers[idx])",
-                                color: .white,
-                                pulse: isPulsing
-                            )
-                            .id(idx)
-                            .frame(width: 190)
                             
-//                            Image("minigame_planet\(planetNumbers[idx])")
-//                                                    .resizable()
-//                                                    .scaledToFit()
-//                                                    .frame(width: 190)
-//                                                    .scaleEffect(localPulsing[i] ? 1.26 : 0.95)
-//                                                    .animation(
-//                                                        localPulsing[i]
-//                                                        ? .easeInOut(duration: 1).repeatForever(autoreverses: true)
-//                                                        : .default,
-//                                                        value: localPulsing[i]
-//                                                    )
+                            Image("minigame_planet\(planetNumbers[idx])")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 190)
+                                                    .scaleEffect(localPulsing[i] ? 1.26 : 0.95)
+                                                    .animation(
+                                                        localPulsing[i]
+                                                        ? .easeInOut(duration: 1).repeatForever(autoreverses: true)
+                                                        : .default,
+                                                        value: localPulsing[i]
+                                                    )
+                                                    .shadow(color: .white.opacity(localPulsing[i] ? 0.9 : 0.3), radius: localPulsing[i] ? 20 : 10)
                         }
                         .position(pos)
                         .onAppear {
