@@ -91,7 +91,7 @@ struct CompleteView: View {
                                     .padding(.horizontal)
                                     .opacity(index < visibleCards ? 1 : 0)
                                     .scaleEffect(index < visibleCards ? 1 : 0.8)
-                                    .animation(.easeOut(duration: 0.4).delay(Double(index) * 0.2), value: visibleCards)
+                                    .animation(.easeOut(duration: 0.4), value: visibleCards)
                                     .onTapGesture {
                                         speechViewModel.speak(text: item.translations[langCode]!, language: langCode)
                                     }
