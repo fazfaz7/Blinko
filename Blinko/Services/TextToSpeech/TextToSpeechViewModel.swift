@@ -54,9 +54,16 @@ class TextToSpeechService: NSObject, AVSpeechSynthesizerDelegate {
         utterance.pitchMultiplier = 1.0
 
         switch language {
-        case "it": utterance.voice = AVSpeechSynthesisVoice(language: "it-IT")
-        case "es": utterance.voice = AVSpeechSynthesisVoice(language: "es-MX")
-        default:   utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+        case "it":
+            utterance.voice = AVSpeechSynthesisVoice(language: "it-IT")
+        case "es":
+            utterance.voice = AVSpeechSynthesisVoice(language: "es-MX")
+        case "pt": // Portuguese
+            utterance.voice = AVSpeechSynthesisVoice(language: "pt-BR") // or "pt-PT"
+        case "ja": // Japanese
+            utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
+        default:
+            utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
         }
 
         onSpeakingStatusChanged?(true) // ✅ Notify start

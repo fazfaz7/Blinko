@@ -19,14 +19,79 @@ struct VocabularyWord: Identifiable, Codable, Hashable {
 
 
 
-var level1_data = Level(title: "level1", words: [VocabularyWord(baseWord: "pencil", imageName: "pencil", translations: ["en": "pencil", "es": "lápiz", "it": "matita"]), VocabularyWord(baseWord: "notebook", imageName: "notebook", translations: ["en": "notebook", "es": "libreta", "it": "quaderno"]), VocabularyWord(baseWord: "ruler", imageName: "ruler", translations: ["en": "ruler", "es": "regla", "it": "righello"]), VocabularyWord(baseWord: "pen", imageName: "pen", translations: ["en": "pen", "es": "pluma", "it": "penna"])])
+var level1_data = Level(title: "level1", words: [
+    VocabularyWord(baseWord: "pencil", imageName: "pencil", translations: [
+        "en": "pencil", "es": "lápiz", "it": "matita", "pt": "lápis", "ja": "えんぴつ"
+    ]),
+    VocabularyWord(baseWord: "notebook", imageName: "notebook", translations: [
+        "en": "notebook", "es": "libreta", "it": "quaderno", "pt": "caderno", "ja": "ノート"
+    ]),
+    VocabularyWord(baseWord: "ruler", imageName: "ruler", translations: [
+        "en": "ruler", "es": "regla", "it": "righello", "pt": "régua", "ja": "ものさし"
+    ]),
+    VocabularyWord(baseWord: "pen", imageName: "pen", translations: [
+        "en": "pen", "es": "pluma", "it": "penna", "pt": "caneta", "ja": "ペン"
+    ])
+])
 
-var level2_data = Level(title: "level2", words: [VocabularyWord(baseWord: "backpack", imageName: "backpack", translations: ["en": "backpack", "es": "mochila", "it": "zaino"]), VocabularyWord(baseWord: "sharpener", imageName: "sharpener", translations: ["en": "sharpener", "es": "sacapuntas", "it": "temperamatite"]), VocabularyWord(baseWord: "rubber", imageName: "rubber", translations: ["en": "rubber", "es": "borrador", "it": "gomma"]), VocabularyWord(baseWord: "glue", imageName: "glue", translations: ["en": "glue", "es": "pegamento", "it": "colla"])])
+var level2_data = Level(title: "level2", words: [
+    VocabularyWord(baseWord: "backpack", imageName: "backpack", translations: [
+        "en": "backpack", "es": "mochila", "it": "zaino", "pt": "mochila", "ja": "リュックサック"
+    ]),
+    VocabularyWord(baseWord: "sharpener", imageName: "sharpener", translations: [
+        "en": "sharpener", "es": "sacapuntas", "it": "temperamatite", "pt": "apontador", "ja": "えんぴつけずり"
+    ]),
+    VocabularyWord(baseWord: "rubber", imageName: "rubber", translations: [
+        "en": "rubber", "es": "borrador", "it": "gomma", "pt": "borracha", "ja": "けしゴム"
+    ]),
+    VocabularyWord(baseWord: "glue", imageName: "glue", translations: [
+        "en": "glue", "es": "pegamento", "it": "colla", "pt": "cola", "ja": "のり"
+    ])
+])
 
-var level3_data = Level(title: "level3", words: [VocabularyWord(baseWord: "carrot", imageName: "carrot", translations: ["en": "carrot", "es": "zanahoria", "it": "carota"]), VocabularyWord(baseWord: "pear", imageName: "pear", translations: ["en": "pear", "es": "pera", "it": "pera"]), VocabularyWord(baseWord: "banana", imageName: "banana", translations: ["en": "banana", "es": "plátano", "it": "banana"]), VocabularyWord(baseWord: "tomato", imageName: "tomato", translations: ["en": "tomato", "es": "tomate", "it": "pomodoro"])])
+var level3_data = Level(title: "level3", words: [
+    VocabularyWord(baseWord: "carrot", imageName: "carrot", translations: [
+        "en": "carrot", "es": "zanahoria", "it": "carota", "pt": "cenoura", "ja": "にんじん"
+    ]),
+    VocabularyWord(baseWord: "pear", imageName: "pear", translations: [
+        "en": "pear", "es": "pera", "it": "pera", "pt": "pêra", "ja": "なし"
+    ]),
+    VocabularyWord(baseWord: "banana", imageName: "banana", translations: [
+        "en": "banana", "es": "plátano", "it": "banana", "pt": "banana", "ja": "バナナ"
+    ]),
+    VocabularyWord(baseWord: "tomato", imageName: "tomato", translations: [
+        "en": "tomato", "es": "tomate", "it": "pomodoro", "pt": "tomate", "ja": "トマト"
+    ])
+])
+
+var level4_data = Level(title: "level4", words: [
+    VocabularyWord(baseWord: "carrot", imageName: "carrot", translations: [
+        "en": "carrot", "es": "zanahoria", "it": "carota", "pt": "cenoura", "ja": "にんじん"
+    ]),
+    VocabularyWord(baseWord: "pear", imageName: "pear", translations: [
+        "en": "pear", "es": "pera", "it": "pera", "pt": "pêra", "ja": "なし"
+    ]),
+    VocabularyWord(baseWord: "banana", imageName: "banana", translations: [
+        "en": "banana", "es": "plátano", "it": "banana", "pt": "banana", "ja": "バナナ"
+    ]),
+    VocabularyWord(baseWord: "tomato", imageName: "tomato", translations: [
+        "en": "tomato", "es": "tomate", "it": "pomodoro", "pt": "tomate", "ja": "トマト"
+    ])
+])
 
 
-var level4_data = Level(title: "level3", words: [VocabularyWord(baseWord: "carrot", imageName: "carrot", translations: ["en": "carrot", "es": "zanahoria", "it": "carota"]), VocabularyWord(baseWord: "pear", imageName: "pear", translations: ["en": "pear", "es": "pera", "it": "pera"]), VocabularyWord(baseWord: "banana", imageName: "banana", translations: ["en": "banana", "es": "plátano", "it": "banana"]), VocabularyWord(baseWord: "tomato", imageName: "tomato", translations: ["en": "tomato", "es": "tomate", "it": "pomodoro"])])
+var level5_data = Level(title: "level5", words: [
+    VocabularyWord(baseWord: "carrot", imageName: "carrot", translations: [
+        "en": "carrot", "es": "zanahoria", "it": "carota", "pt": "cenoura", "ja": "にんじん"
+    ]),
+    VocabularyWord(baseWord: "pear", imageName: "pear", translations: [
+        "en": "pear", "es": "pera", "it": "pera", "pt": "pêra", "ja": "なし"
+    ]),
+    VocabularyWord(baseWord: "banana", imageName: "banana", translations: [
+        "en": "banana", "es": "plátano", "it": "banana", "pt": "banana", "ja": "バナナ"
+    ]),
+    VocabularyWord(baseWord: "tomato", imageName: "tomato", translations: [
+        "en": "tomato", "es": "tomate", "it": "pomodoro", "pt": "tomate", "ja": "トマト"
+    ])
+])
 
-
-var level5_data = Level(title: "level3", words: [VocabularyWord(baseWord: "carrot", imageName: "carrot", translations: ["en": "carrot", "es": "zanahoria", "it": "carota"]), VocabularyWord(baseWord: "pear", imageName: "pear", translations: ["en": "pear", "es": "pera", "it": "pera"]), VocabularyWord(baseWord: "banana", imageName: "banana", translations: ["en": "banana", "es": "plátano", "it": "banana"]), VocabularyWord(baseWord: "tomato", imageName: "tomato", translations: ["en": "tomato", "es": "tomate", "it": "pomodoro"])])

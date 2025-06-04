@@ -18,6 +18,8 @@ struct SelectLanguageView: View {
                     Text("Español").tag("es")
                     Text("English").tag("en")
                     Text("Italiano").tag("it")
+                    Text("Japanese").tag("ja")
+                    Text("Portoghese").tag("pt")
                 }
             }
 

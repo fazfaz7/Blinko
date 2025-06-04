@@ -97,9 +97,10 @@ struct StarMapView: View {
                 }
             }
             .cornerRadius(24)
+            
            
         }
-        .aspectRatio(1, contentMode: .fit)
+        //.aspectRatio(1, contentMode: .fit)
     }
 }
 
@@ -159,8 +160,10 @@ struct LevelSelectionView: View {
         NavigationStack {
             ZStack {
                 Image("SpaceBackground")
+                    .resizable()
                     .scaledToFill()
                     .ignoresSafeArea()
+                   
 
                 StarMapView(
                     stars: stars,
@@ -172,10 +175,30 @@ struct LevelSelectionView: View {
                     currentLevel = selectedID
                     selectedLevel = levels[selectedID]
                 }
-                    .padding()
+                .frame(width: 1100)
+                
+                VStack {
+                    
+                    HStack {
+                        
+                        Button {
+                            showLanguageSheet = true
+                        } label: {
+                            Image(systemName: "gear")
+                                .font(.largeTitle)
+                                .foregroundStyle(.white)
+                        }
+                        
+                        
+                    }.padding()
+                    
+                    Spacer()
+                        
+                   
+                }.foregroundStyle(.white)
                     
                 
-            }.ignoresSafeArea()
+            }
                .onAppear {
                    updatePulsingStates()
                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
@@ -204,6 +227,9 @@ struct LevelSelectionView: View {
             }
         }
         .statusBarHidden()
+        .sheet(isPresented: $showLanguageSheet) {
+            SelectLanguageView()
+        }
     }
     
     private func updatePulsingStates() {
