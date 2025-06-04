@@ -151,6 +151,7 @@ struct ChooseMinigameView: View {
                                 color: .white,
                                 pulse: isPulsing
                             )
+                            .id(idx)
                             .frame(width: 190)
                             
 //                            Image("minigame_planet\(planetNumbers[idx])")
