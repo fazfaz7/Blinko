@@ -11,6 +11,8 @@ struct PlanetGradientOverlay: View {
     let baseColor: Color
     let pulse: Bool
     
+    @State private var isPulsing = false
+
     var body: some View {
         Image(imageName)
             .resizable()
@@ -22,7 +24,27 @@ struct PlanetGradientOverlay: View {
                     endPoint: .bottomTrailing
                 )
             )
-            .scaleEffect(pulse ? 1.1 : 1.0)
+            .scaleEffect(isPulsing ? 1.1 : 1.0)
             .opacity(0.5)
+            .onAppear {
+                if pulse {
+                    withAnimation(.easeInOut(duration: 1).repeatForever(autoreverses: true)) {
+                        isPulsing = true
+                    }
+                }
+            }
+            .onChange(of: pulse) {
+                if pulse {
+                    withAnimation(.easeInOut(duration: 1).repeatForever(autoreverses: true)) {
+                        isPulsing = true
+                    }
+                } else {
+                    isPulsing = false
+                }
+            }
+            .onDisappear {
+                isPulsing = false
+            }
     }
 }
+
