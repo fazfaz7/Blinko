@@ -43,6 +43,12 @@ struct PulsingPlanetView: View {
                     }
                 }
         }
+        .onDisappear {
+                    withAnimation() {
+                        pulseAnim = false
+                        enableAura = false
+                    }
+                }
     }
 }
 
