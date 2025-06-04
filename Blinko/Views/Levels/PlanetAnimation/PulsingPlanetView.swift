@@ -35,23 +35,36 @@ struct PulsingPlanetView: View {
                 .aspectRatio(contentMode: .fit)
                 .scaleEffect(pulseAnim ? 1.1 : 1.0)
                 .shadow(color: color.opacity(pulseAnim ? 0.9 : 0.3), radius: pulseAnim ? 20 : 10)
-                .onAppear {
-                    if pulse {
-                        withAnimation(.easeInOut(duration: 1.0).repeatForever(autoreverses: true)) {
-                            pulseAnim = true
-                        }
-                    }
+        }
+        .onAppear {
+            if pulse {
+                withAnimation(.easeInOut(duration: 1.0).repeatForever(autoreverses: true)) {
+                    pulseAnim = true
                 }
+            } else {
+                pulseAnim = false
+                enableAura = false
+            }
+        }
+        .onChange(of: pulse) {
+            if pulse {
+                withAnimation(.easeInOut(duration: 1.0).repeatForever(autoreverses: true)) {
+                    pulseAnim = true
+                }
+                withAnimation(.linear(duration: 3).repeatForever(autoreverses: false)) {
+                    enableAura = true
+                }
+            } else {
+                pulseAnim = false
+                enableAura = false
+            }
         }
         .onDisappear {
-                    withAnimation() {
-                        pulseAnim = false
-                        enableAura = false
-                    }
-                }
+            pulseAnim = false
+            enableAura = false
+        }
     }
 }
-
 
 struct PulsePlanetAura: View {
     let imageName: String
