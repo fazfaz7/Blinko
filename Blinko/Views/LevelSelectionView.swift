@@ -24,10 +24,10 @@ struct StarView: View {
         Image(imageName)
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .opacity(isUnlocked ? 1.0 : 0.6)
+            .opacity(isUnlocked ? 1.0 : 0.45)
             .grayscale(isUnlocked ? 0.0 : 1.0)
-            .shadow(color: pulsing ? .yellow : .clear, radius: pulsing ? 20 : 0)
-            .scaleEffect(pulsing ? 1.18 : 1)
+            .shadow(color: pulsing ? .white : .clear, radius: pulsing ? 20 : 0)
+            .scaleEffect(pulsing ? 1.32 : 1)
             .animation(
                             pulsing ? .easeInOut(duration: 1).repeatForever(autoreverses: true) : .default,
                             value: pulsing
@@ -65,7 +65,7 @@ struct StarMapView: View {
                                 }
                                 .trim(from: 0, to: pathAnim[star.id]) // Use the corresponding pathAnim index
                                 .stroke(
-                                    style: StrokeStyle(lineWidth: 3, lineCap: .round, dash: [10, 5])
+                                    style: StrokeStyle(lineWidth: 3, lineCap: .round)
                                 )
                                 .foregroundColor(.white)
                                 .zIndex(-1)
