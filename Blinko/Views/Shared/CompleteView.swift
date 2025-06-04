@@ -28,6 +28,8 @@ struct CompleteView: View {
     @State private var showNext = false
     @State private var showConfetti = false
     
+    @State private var visibleCards: Int = 0
+    
     @State private var mascotMood: MascotMood = .happy
    
     @ObservedObject var userProgress: UserProgress
@@ -76,28 +78,35 @@ struct CompleteView: View {
                 VStack {
                     Spacer()
                     HStack {
-                        ForEach(0..<4, id: \.self) { index in
-                            
-                            let item = level.words[index]
-                            let cardColor = colors[index]
-                            
-                            
-                            CardView(
-                                cardSize: geometry.size.width * 0.2,
-                                imageName: item.imageName,
-                                label: item.translations[
-                                    langCode]!,
-                                cardColor: cardColor
-                            ).padding(.horizontal)
-                            
-                                .onTapGesture {
-                                    speechViewModel.speak(text: item.translations[langCode]!, language: langCode)
+                                ForEach(0..<4, id: \.self) { index in
+                                    let item = level.words[index]
+                                    let cardColor = colors[index]
+
+                                    CardView(
+                                        cardSize: geometry.size.width * 0.2,
+                                        imageName: item.imageName,
+                                        label: item.translations[langCode]!,
+                                        cardColor: cardColor
+                                    )
+                                    .padding(.horizontal)
+                                    .opacity(index < visibleCards ? 1 : 0)
+                                    .scaleEffect(index < visibleCards ? 1 : 0.8)
+                                    .animation(.easeOut(duration: 0.4).delay(Double(index) * 0.2), value: visibleCards)
+                                    .onTapGesture {
+                                        speechViewModel.speak(text: item.translations[langCode]!, language: langCode)
+                                    }
                                 }
-                            
-                        }
-                    }.padding()
-                        .opacity(showCards ? 1 : 0)
-                        .animation(.easeOut(duration: 0.7), value: showCards)
+                            }
+                            .onAppear {
+                                // Reveal and speak each card one by one
+                                for i in 0..<4 {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 2 + 2) {
+                                        visibleCards = i + 1
+                                        let item = level.words[i]
+                                        speechViewModel.speak(text: item.translations[langCode]!, language: langCode)
+                                    }
+                                }
+                            }
                     
                     Spacer()
                     
@@ -159,10 +168,10 @@ struct CompleteView: View {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                         withAnimation(.easeInOut(duration: 0.3)) {
                             showCards = true
-                            showNext = true
                         }
-                        DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 7) {
                             withAnimation {
+                                showNext = true
                             }
                         }
                     }

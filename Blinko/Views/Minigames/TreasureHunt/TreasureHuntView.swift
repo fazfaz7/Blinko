@@ -264,26 +264,29 @@ struct TreasureHuntView: View {
                                     text: object.translations[langCode]!,
                                     language: langCode)
                             }
-                            
-                        HStack{
+                        
+                        VStack{
                             Spacer()
-                            Button(action: {
-                                withAnimation {
-                                    showObjectFound = false
-                                }
-                            }) {
-                                Image(systemName: "arrow.right.circle.fill")
-                                    .resizable()
-                                    .frame(width: 130, height: 130)
-                                    .foregroundColor(.white)
-                                    .background(Color.tealBlinko)
-                                    .clipShape(Circle())
-                                    .padding(.trailing, 60)
-
+                            HStack{
+                                Spacer()
+                                Button(action: {
+                                    withAnimation {
+                                        showObjectFound = false
+                                    }
+                                }) {
+                                    Image(systemName: "arrow.right.circle.fill")
+                                        .resizable()
+                                        .frame(width: 130, height: 130)
+                                        .foregroundColor(.white)
+                                        .background(Color.tealBlinko)
+                                        .clipShape(Circle())
+                                        .padding(50)
                                     
+                                    
+                                }
+                                .padding()
+                                
                             }
-                            .padding()
-
                         }
                             
                         
@@ -293,8 +296,8 @@ struct TreasureHuntView: View {
                             HStack {
                                 MascotView(
                                     mood: speechViewModel.isSpeaking ? .wow : .normal,
-                                    width: speechViewModel.isSpeaking ? 420 : 300,
-                                    height: speechViewModel.isSpeaking ? 420 : 300
+                                    width: speechViewModel.isSpeaking ? 400 : 300,
+                                    height: speechViewModel.isSpeaking ? 400 : 300
                                 )
                                 .animation(.easeInOut(duration: 0.1), value: speechViewModel.isSpeaking)
                                 .onTapGesture {
@@ -314,6 +317,7 @@ struct TreasureHuntView: View {
                                 
                             }
                         }
+                        .padding()
                         .ignoresSafeArea()
                         
                     }
