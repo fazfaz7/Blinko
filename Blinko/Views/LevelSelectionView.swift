@@ -132,6 +132,7 @@ struct LevelSelectionView: View {
     @State private var localPulsing: [Bool] = [false, false, false, false, false]
     
     @State private var pathAnim: [CGFloat] = [0, 0, 0, 0]
+    @State private var showOnboarding = true
     
     // Unlocked up to the highest level the user has unlocked
     private var unlockedUpTo: Int {
@@ -177,26 +178,6 @@ struct LevelSelectionView: View {
                 }
                 .frame(width: 1100)
                 
-                VStack {
-                    
-                    HStack {
-                        
-                        Button {
-                            showLanguageSheet = true
-                        } label: {
-                            Image(systemName: "gear")
-                                .font(.largeTitle)
-                                .foregroundStyle(.white)
-                        }
-                        
-                        
-                    }.padding()
-                    
-                    Spacer()
-                        
-                   
-                }.foregroundStyle(.white)
-                    
                 
             }
                .onAppear {
@@ -227,8 +208,8 @@ struct LevelSelectionView: View {
             }
         }
         .statusBarHidden()
-        .sheet(isPresented: $showLanguageSheet) {
-            SelectLanguageView()
+        .fullScreenCover(isPresented: $showOnboarding) {
+            OnboardingView(showOnboarding: $showOnboarding)
         }
     }
     
