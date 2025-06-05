@@ -1,0 +1,25 @@
+/* 
+  Localizable.strings
+  Blinko
+
+  Created by Adrian Emmanuel Faz Mercado on 05/06/25.
+  
+*/
+welcome_title = "Welcome to Blinko!";
+welcome_description = "Blinko helps kids discover a new language through play and\n**real-world exploration**.";
+
+onboarding_objects_title = "Every level features **four real-world objects** that children can explore, learn about, and discover.";
+
+treasure_hunt_title = "**Treasure Hunt**";
+treasure_hunt_description = "Look for each object from the level in the real world and **snap a picture** with the camera. Discover its name in the new language!";
+
+image_matching_title = "**Image-Matching Game**";
+image_matching_description = "Listen to the word and tap the card with the matching object. Try to connect every sound to the **right drawing**!";
+
+find_it_again_title = "**Find It Again!**";
+find_it_again_description = "You’ll hear a word in your new language and see its silhouette. Search for the real object nearby and show it to the camera to find out if you matched it!";
+
+language_selection_title = "**Language Selection**";
+language_selection_description = "Pick the language your child will learn!";
+
+onboarding_lets_go = "Let's Go!";

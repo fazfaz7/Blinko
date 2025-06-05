@@ -47,17 +47,16 @@ struct OnboardingView: View {
                         )
                         .overlay(
                             VStack(spacing: 20) {
-                                Text("Welcome to **Blinko**!")
+                                Text(NSLocalizedString("welcome_title", comment: ""))
                                     .font(.custom("Baloo2-Bold", size: 75))
                                     .fontWeight(.semibold)
                                     .foregroundColor(.darkBlue)
                                     .multilineTextAlignment(.center)
                                     .minimumScaleFactor(0.7)
+                                    .lineLimit(1)
                                     .frame(maxWidth: geometry.size.width * 0.55)
 
-                                Text("""
-                                Blinko helps kids discover a new language through play and \n**real-world exploration**.
-                                """)
+                                Text("welcome_description")
                                     .font(.custom("Baloo2-Medium", size: 45))
                                     .foregroundColor(.darkBlue)
                                     .multilineTextAlignment(.center)
@@ -79,9 +78,7 @@ struct OnboardingView: View {
                         .overlay(
                             VStack(spacing: 20) {
         
-                                Text("""
-                                Every level features four **real-world objects** that children can explore, learn about, and discover.
-                                """)
+                                Text("onboarding_objects_title")
                                     .font(.custom("Baloo2-Medium", size: 45))
                                     .foregroundColor(.darkBlue)
                                     .multilineTextAlignment(.center)
@@ -127,15 +124,13 @@ struct OnboardingView: View {
                         .overlay(
                             VStack(spacing: 0) {
        
-                                Text("**Treasure Hunt**")
+                                Text("treasure_hunt_title")
                                     .font(.custom("Baloo2-Medium", size: 50))
                                     .foregroundColor(.darkBlue)
                                     .multilineTextAlignment(.center)
                                     .minimumScaleFactor(0.5)
                                     .frame(maxWidth: geometry.size.width * 0.6)
-                                Text("""
-                                Look for each object from the level in the real world and **snap a picture** with the camera. Discover its name in the new language!
-                                """)
+                                Text("treasure_hunt_description")
                                     .font(.custom("Baloo2-Medium", size: 40))
                                     .foregroundColor(.darkBlue)
                                     .multilineTextAlignment(.center)
@@ -159,15 +154,13 @@ struct OnboardingView: View {
                         .overlay(
                             VStack(spacing: 0) {
        
-                                Text("**Image-Matching Game**")
+                                Text("image_matching_title")
                                     .font(.custom("Baloo2-Medium", size: 50))
                                     .foregroundColor(.darkBlue)
                                     .multilineTextAlignment(.center)
                                     .minimumScaleFactor(0.5)
                                     .frame(maxWidth: geometry.size.width * 0.6)
-                                Text("""
-                                 Listen to the word and tap the card with the matching object. Try to connect every sound to the **right drawing**!
-                                """)
+                                Text("image_matching_description")
                                     .font(.custom("Baloo2-Medium", size: 40))
                                     .foregroundColor(.darkBlue)
                                     .multilineTextAlignment(.center)
@@ -200,15 +193,13 @@ struct OnboardingView: View {
                         .overlay(
                             VStack(spacing: 0) {
        
-                                Text("**Find It Again!**")
+                                Text("find_it_again_title")
                                     .font(.custom("Baloo2-Medium", size: 50))
                                     .foregroundColor(.darkBlue)
                                     .multilineTextAlignment(.center)
                                     .minimumScaleFactor(0.5)
                                     .frame(maxWidth: geometry.size.width * 0.6)
-                                Text("""
-                                 You’ll hear a word in your new language and see its silhouette. Search for the real object nearby and show it to the camera to find out if you matched it!
-                                """)
+                                Text("find_it_again_description")
                                     .font(.custom("Baloo2-Medium", size: 40))
                                     .foregroundColor(.darkBlue)
                                     .multilineTextAlignment(.center)
@@ -232,15 +223,13 @@ struct OnboardingView: View {
                         .overlay(
                             VStack(spacing: 0) {
        
-                                Text("**Language Selection**")
+                                Text("language_selection_title")
                                     .font(.custom("Baloo2-Medium", size: 50))
                                     .foregroundColor(.darkBlue)
                                     .multilineTextAlignment(.center)
                                     .minimumScaleFactor(0.5)
                                     .frame(maxWidth: geometry.size.width * 0.6)
-                                Text("""
-                                 Pick the language your child will learn!
-                                """)
+                                Text("language_selection_description")
                                     .font(.custom("Baloo2-Medium", size: 40))
                                     .foregroundColor(.darkBlue)
                                     .multilineTextAlignment(.center)
@@ -277,7 +266,7 @@ struct OnboardingView: View {
                                 Button {
                                     showOnboarding = false
                                 } label: {
-                                    Text("Let's Go!")
+                                    Text("onboarding_lets_go")
                                         .foregroundStyle(.darkBlue)
                                         .padding()
                                         .background(RoundedRectangle(cornerRadius: 10).fill(Color.yellowBlinko))
