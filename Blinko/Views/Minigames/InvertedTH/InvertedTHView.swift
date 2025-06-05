@@ -24,7 +24,7 @@ struct InvertedTHView: View {
     @State private var foundIndexes: Set<Int> = []
 
     // Variable used to store the last object found and display it in a big size.
-    @State private var lastObjectFound: VocabularyWord? = nil
+    @State private var lastObjectFound: VocabularyWord? = nil //VocabularyWord(baseWord: "pencil", imageName: "pencil", translations: ["en": "pencil", "es": "lápiz", "it": "matita"])
 
     // Control variable that displays the card whenever the user finds an object.
     @State private var showObjectFound: Bool = false
@@ -197,7 +197,60 @@ struct InvertedTHView: View {
                             language: langCode)
                     }
                     
+                    VStack{
+                        
+                        HStack{
+                            Spacer()
+                            Button(action: {
+                                withAnimation {
+                                    showObjectFound = false
+                                }
+                            }) {
+                                Image(systemName: "arrow.right.circle.fill")
+                                    .resizable()
+                                    .frame(width: 130, height: 130)
+                                    .foregroundColor(.white)
+                                    .background(Color.tealBlinko)
+                                    .clipShape(Circle())
+                                    .padding(50)
+                                
+                                
+                            }
+                            .padding()
+                            
+                        }
+                    }
+                    
+                    VStack {
+                        Spacer()
+                        HStack {
+                            MascotView(
+                                mood: speechViewModel.isSpeaking ? .wow : .normal,
+                                width: speechViewModel.isSpeaking ? 400 : 300,
+                                height: speechViewModel.isSpeaking ? 400 : 300
+                            )
+                            .animation(.easeInOut(duration: 0.1), value: speechViewModel.isSpeaking)
+                            .onTapGesture {
+                                speechViewModel.speak(
+                                    text: object.translations[langCode]!,
+                                    language: langCode
+                                )
+                            }
+                            .onAppear {
+                                speechViewModel.speak(
+                                    text: object.translations[langCode]!,
+                                    language: langCode
+                                )
+                            }
 
+                            Spacer()
+                            
+                        }
+                    }
+                    .padding()
+                    .ignoresSafeArea()
+                    
+                    
                 }
 
             }
