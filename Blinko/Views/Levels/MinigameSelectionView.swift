@@ -90,15 +90,15 @@ struct MinigameContainerView: View {
     func minigameView(for stage: GameStage) -> some View {
         switch stage {
         case .treasureHunt:
-            TreasureHuntView(level: level, userProgress: userProgress) {
+            TreasureHuntView(level: level) {
                 selectedStage = nil
-            }
+            }.environmentObject(userProgress)
         case .memoryGame:
-            ImageMatchingView(level: level, userProgress: userProgress) {
+            ImageMatchingView(level: level) {
                 selectedStage = nil
-            }
+            }.environmentObject(userProgress)
         case .invertedTH:
-            InvertedTHView(level: level, userProgress: userProgress) {
+            InvertedTHView(level: level) {
                 selectedStage = nil
             }
         }

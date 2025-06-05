@@ -32,7 +32,7 @@ struct CompleteView: View {
     
     @State private var mascotMood: MascotMood = .happy
    
-    @ObservedObject var userProgress: UserProgress
+    @EnvironmentObject var userProgress: UserProgress
     var onExit: () -> Void
     
     
@@ -183,5 +183,6 @@ struct CompleteView: View {
 }
 
 #Preview {
-    CompleteView(level: level1_data,  userProgress: UserProgress(), onExit: {})
+    CompleteView(level: level1_data,  onExit: {})
+        .environmentObject(UserProgress())
 }

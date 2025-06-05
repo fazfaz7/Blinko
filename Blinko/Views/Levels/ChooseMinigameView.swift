@@ -11,7 +11,7 @@ struct ChooseMinigameView: View {
     // Array of 3 planet numbers to display (e.g., [6, 2, 4])
     
     let level: Level
-    @ObservedObject var userProgress: UserProgress
+    @EnvironmentObject var userProgress: UserProgress
     
     // A closure that is called when the user closes the minigame container.
     var onClose: () -> Void
@@ -232,20 +232,20 @@ struct ChooseMinigameView: View {
     func minigameView(for stage: GameStage) -> some View {
         switch stage {
         case .treasureHunt:
-            TreasureHuntView(level: level, userProgress: userProgress) {
+            TreasureHuntView(level: level) {
                 selectedStage = nil
-            }
+            }.environmentObject(userProgress)
         case .memoryGame:
-            ImageMatchingView(level: level, userProgress: userProgress) {
+            ImageMatchingView(level: level) {
                 selectedStage = nil
-            }
+            }.environmentObject(userProgress)
         case .invertedTH:
-            InvertedTHView(level: level, userProgress: userProgress) {
+            InvertedTHView(level: level) {
                 selectedStage = nil
                 DispatchQueue.main.asyncAfter(deadline: .now()+0.2){
                     onClose()
                 }
-            }
+            }.environmentObject(userProgress)
         }
     }
     
@@ -286,9 +286,8 @@ struct ChooseMinigameView: View {
     // Preview with example planet numbers
     ChooseMinigameView(
         level: level1_data,
-        userProgress: UserProgress(),
         onClose: {}
-    )
+    ).environmentObject(UserProgress())
 }
 
 
@@ -297,3 +296,14 @@ struct ChooseMinigameView: View {
 // [0.5, 0.7, 0.35]
 // [0.7, 0.5, 0.35]
 // [0.3, 0.5, 0.65]
+
+enum GameStage: Identifiable, CaseIterable, Codable{
+    case treasureHunt, memoryGame, invertedTH
+       var id: String { // For fullScreenCover
+           switch self {
+           case .treasureHunt: return "treasureHunt"
+           case .memoryGame: return "memoryGame"
+           case .invertedTH: return "invertedTH"
+           }
+       }
+}

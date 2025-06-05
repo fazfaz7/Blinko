@@ -53,8 +53,7 @@ struct SelectLevel: View {
         }
         .fullScreenCover(item: $selectedLevel) { level in
             ChooseMinigameView(
-                level: level,
-                userProgress: userProgress
+                level: level
             ) {
                 selectedLevel = nil
             }

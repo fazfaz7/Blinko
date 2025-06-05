@@ -10,16 +10,14 @@ struct TreasureHuntView: View {
     // View Model of ML that manages the object-detection part.
     @State private var viewModel: MLViewModel
     
-    init(level: Level, userProgress: UserProgress, onNext: @escaping () -> Void) {
+    init(level: Level, onNext: @escaping () -> Void) {
         self.level = level
-        self.userProgress = userProgress
         self.onNext = onNext
         // Initialize viewModel with the correct model name for this level!
         _viewModel = State(initialValue: MLViewModel(modelName: level.title))
     }
     
-    
-    
+    @EnvironmentObject var userProgress: UserProgress
     // Control variable to show the sheet whenever the user discovers an object.
     @State private var showSheet: Bool = false
     
@@ -62,7 +60,6 @@ struct TreasureHuntView: View {
     // Current level
     var level: Level = level1_data
     
-    @ObservedObject var userProgress: UserProgress
     
     // Closure used to go to the next minigame. (Image Matching)
     var onNext: () -> Void
@@ -83,12 +80,12 @@ struct TreasureHuntView: View {
                 
                 if (unlockedItems.count == 4 && !showObjectFound){
                     
-                    CompleteView(level: level, userProgress: userProgress, onExit: {
+                    CompleteView(level: level, onExit: {
                         viewModel.cameraManager.stopSession()
                         userProgress.markStageCompleted(.treasureHunt, for: level)
                         onNext()
                         
-                    })
+                    }).environmentObject(userProgress)
                     
                     
                 }
@@ -378,5 +375,6 @@ struct TreasureHuntView: View {
 }
 
 #Preview {
-    TreasureHuntView(level: level1_data, userProgress: UserProgress(), onNext: {})
+    TreasureHuntView(level: level1_data, onNext: {})
+        .environmentObject(UserProgress())
 }

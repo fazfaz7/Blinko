@@ -38,11 +38,11 @@ struct ImageMatchingView: View {
         textToSpeechService: TextToSpeechService())
     
     // Closure used to go to the next minigame. (Image Matching)
-    @ObservedObject var userProgress: UserProgress
+    @EnvironmentObject var userProgress: UserProgress
     var onNext: () -> Void
     @AppStorage("selectedLanguage") var langCode: String = "es"
     
-    init(level: Level,  userProgress: UserProgress, onNext: @escaping () -> Void) {
+    init(level: Level,  onNext: @escaping () -> Void) {
         self.level = level
         _remainingWords = State(initialValue: level.words)
         
@@ -53,7 +53,6 @@ struct ImageMatchingView: View {
         }
         _colorMap = State(initialValue: map)
         
-        self.userProgress = userProgress
         self.onNext = onNext
         
     }
@@ -61,11 +60,11 @@ struct ImageMatchingView: View {
     var body: some View {
         
         if isGameFinished {
-            CompleteView(level: level, userProgress: userProgress) {
+            CompleteView(level: level) {
                     userProgress.markStageCompleted(.memoryGame, for: level)
                     onNext()
                 
-            }
+            }.environmentObject(userProgress)
         } else {
             ZStack {
                 // PLANETS BACKGROUND
@@ -268,5 +267,6 @@ struct Shake: GeometryEffect {
 
 
 #Preview {
-    ImageMatchingView(level: level1_data, userProgress: UserProgress(), onNext: {})
+    ImageMatchingView(level: level1_data, onNext: {})
+        .environmentObject(UserProgress())
 }

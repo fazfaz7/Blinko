@@ -49,12 +49,11 @@ struct InvertedTHView: View {
    
     
     var onNext: () -> Void
-    @ObservedObject var userProgress: UserProgress
+    @EnvironmentObject var userProgress: UserProgress
     
-    init(level: Level, userProgress: UserProgress, onNext: @escaping () -> Void ) {
+    init(level: Level, onNext: @escaping () -> Void ) {
         self.level = level
         self.levelObjects = level.words.shuffled()
-        self.userProgress = userProgress
         self.onNext = onNext
         _viewModel = State(initialValue: MLViewModel(modelName: level.title))
     }
@@ -191,18 +190,15 @@ struct InvertedTHView: View {
                         speechViewModel.speak(
                             text: object.translations[langCode]!,
                             language: langCode)
-                    }.onAppear {
-                        speechViewModel.speak(
-                            text: object.translations[langCode]!,
-                            language: langCode)
                     }
-                    
                     VStack{
                         
                         HStack{
                             Spacer()
                             Button(action: {
                                 withAnimation {
+                                    foundIndexes.insert(currentIndex)
+                                    currentIndex += 1
                                     showObjectFound = false
                                 }
                             }) {
@@ -297,7 +293,8 @@ struct InvertedTHView: View {
                 }}
 
             if foundIndexes.count == 4 && !showObjectFound {
-                CompleteView(level: level, userProgress: userProgress, onExit: onNext, lastMinigame: true)
+                CompleteView(level: level, onExit: onNext, lastMinigame: true)
+                    .environmentObject(userProgress)
                     .onAppear{
                         viewModel.cameraManager.stopSession()
 
@@ -312,11 +309,7 @@ struct InvertedTHView: View {
         }.ignoresSafeArea()
             .onTapGesture {
                 
-                if showObjectFound {
-                    showObjectFound = false
-                    foundIndexes.insert(currentIndex)
-                    currentIndex += 1
-                }
+
                 
                 if showObject {
                     showObject = false
@@ -333,5 +326,6 @@ struct InvertedTHView: View {
 }
 
 #Preview {
-    InvertedTHView(level: level1_data, userProgress: UserProgress(), onNext: {})
+    InvertedTHView(level: level1_data,  onNext: {})
+        .environmentObject(UserProgress())
 }

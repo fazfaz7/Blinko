@@ -115,19 +115,12 @@ struct LevelSelectionView: View {
     ]
     
     let levels: [Level] = [level1_data, level2_data, level3_data, level4_data, level5_data]
-    @ObservedObject var userProgress: UserProgress
+    @EnvironmentObject var userProgress: UserProgress
     @State private var selectedLevel: Level? = nil
     @State private var showLanguageSheet: Bool = false
     
-    // Current level should be the highest unlocked level
-    @State private var currentLevel: Int {
-        didSet {
-            // Ensure currentLevel doesn't exceed unlocked levels
-            if currentLevel > unlockedUpTo {
-                currentLevel = unlockedUpTo
-            }
-        }
-    }
+    @State private var currentLevel: Int = 0
+
     
     @State private var localPulsing: [Bool] = [false, false, false, false, false]
     
@@ -144,19 +137,7 @@ struct LevelSelectionView: View {
         }
         return highestUnlocked
     }
-    
-    init(userProgress: UserProgress) {
-        self.userProgress = userProgress
-        // Initialize currentLevel to the highest unlocked level
-        var highestUnlocked = 0
-        for (index, _) in [level1_data, level2_data, level3_data, level4_data, level5_data].enumerated() {
-            if userProgress.isLevelUnlocked(levelIndex: index, levels: [level1_data, level2_data, level3_data, level4_data, level5_data]) {
-                highestUnlocked = index
-            }
-        }
-        self._currentLevel = State(initialValue: highestUnlocked)
-    }
-    
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -181,6 +162,7 @@ struct LevelSelectionView: View {
                 
             }
                .onAppear {
+                   currentLevel = computeHighestUnlocked()
                    updatePulsingStates()
                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                        animateProgressLines()
@@ -200,8 +182,7 @@ struct LevelSelectionView: View {
         }
         .fullScreenCover(item: $selectedLevel) { level in
             ChooseMinigameView(
-                level: level,
-                userProgress: userProgress
+                level: level
             ) {
                 selectedLevel = nil
                 currentLevel = unlockedUpTo
@@ -234,9 +215,20 @@ struct LevelSelectionView: View {
             }
         }
     }
+    
+    private func computeHighestUnlocked() -> Int {
+        var highestUnlocked = 0
+        for (index, _) in levels.enumerated() {
+            if userProgress.isLevelUnlocked(levelIndex: index, levels: levels) {
+                highestUnlocked = index
+            }
+        }
+        return highestUnlocked
+    }
 
 }
 
 #Preview {
-    LevelSelectionView(userProgress: UserProgress())
+    LevelSelectionView()
+        .environmentObject(UserProgress())
 }
