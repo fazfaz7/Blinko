@@ -57,6 +57,7 @@ struct TreasureHuntView: View {
     
     
     
+    
     // Current level
     var level: Level = level1_data
     
@@ -65,6 +66,8 @@ struct TreasureHuntView: View {
     var onNext: () -> Void
     
     @AppStorage("selectedLanguage") var langCode: String = "es"
+    
+    @State private var systemLangCode: String = "en"
     
     
     
@@ -107,7 +110,7 @@ struct TreasureHuntView: View {
                                     label: item.translations[
                                         unlockedItems.contains(
                                             item.baseWord)
-                                        ? langCode : "it"] ?? "",
+                                        ? langCode : systemLangCode] ?? "",
                                     cardColor: cardColor
                                 )
                                 .grayscale(
@@ -252,7 +255,7 @@ struct TreasureHuntView: View {
                             imageName: object.imageName,
                             label: object.translations[
                                 unlockedItems.contains(object.baseWord)
-                                ? langCode : "it"] ?? "",
+                                ? langCode : systemLangCode] ?? "",
                             cardColor: colors[clickedObjectIndex],
                             grayCard: unlockedItems.contains(object.baseWord)
                             ? false : true
@@ -260,17 +263,17 @@ struct TreasureHuntView: View {
                             speechViewModel.speak(
                                 text: object.translations[
                                     unlockedItems.contains(object.baseWord)
-                                    ? langCode : "it"]!,
+                                    ? langCode : systemLangCode]!,
                                 language: unlockedItems.contains(
-                                    object.baseWord) ? langCode : "it")
+                                    object.baseWord) ? langCode : systemLangCode)
                         }.onAppear {
                             DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {
                                 speechViewModel.speak(
                                     text: object.translations[
                                         unlockedItems.contains(object.baseWord)
-                                        ? langCode : "it"]!,
+                                        ? langCode : systemLangCode]!,
                                     language: unlockedItems.contains(
-                                        object.baseWord) ? langCode : "it")
+                                        object.baseWord) ? langCode : systemLangCode)
                             }
                         }
                         
@@ -369,9 +372,20 @@ struct TreasureHuntView: View {
                 .onDisappear {
                     viewModel.cameraManager.stopSession()
                 }
+                .onAppear {
+                    systemLangCode = getSystemLangCode()
+                }
         }.statusBarHidden()
         
     }
+    
+    func getSystemLangCode() -> String {
+        let preferred = Locale.preferredLanguages.first ?? "en"
+        if preferred.starts(with: "es") { return "es" }
+        if preferred.starts(with: "it") { return "it" }
+        return "en" // fallback
+    }
+    
 }
 
 #Preview {
