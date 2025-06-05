@@ -50,6 +50,9 @@ struct TreasureHuntView: View {
     // To change mascot mood
     @State private var mascotMood: MascotMood = .happy
     
+    // To make the scanner image glow
+    @State private var glowing = false
+    
     // Speech View Model to handle the speech-to-text feature.
     @StateObject private var speechViewModel = TextToSpeechViewModel(
         textToSpeechService: TextToSpeechService())
@@ -131,15 +134,46 @@ struct TreasureHuntView: View {
                     }
                     
                     VStack {
-                        Image("ScannerImage")
+                        Image(viewModel.detectedObject != "none" ? "ScannerYellow" : "ScannerBlue")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 700)
-                        // The image glows if the user is detecting something.
                             .shadow(
                                 color: viewModel.detectedObject != "none"
-                                ? .yellow : .clear, radius: 40)
+                                    ? Color.yellow.opacity(glowing ? 0.9 : 0.3)
+                                    : .clear,
+                                radius: viewModel.detectedObject != "none"
+                                    ? (glowing ? 60 : 20)
+                                    : 0
+                            )
+                            .scaleEffect(viewModel.detectedObject != "none"
+                                ? (glowing ? 1.08 : 0.96)
+                                : 1.0
+                            )
+                            .onAppear {
+                                if viewModel.detectedObject != "none" {
+                                    withAnimation(
+                                        .easeInOut(duration: 1.0)
+                                            .repeatForever(autoreverses: true)
+                                    ) {
+                                        glowing = true
+                                    }
+                                }
+                            }
+                            .onChange(of: viewModel.detectedObject != "none") {
+                                if viewModel.detectedObject != "none" {
+                                    withAnimation(
+                                        .easeInOut(duration: 1.0)
+                                            .repeatForever(autoreverses: true)
+                                    ) {
+                                        glowing = true
+                                    }
+                                } else {
+                                    glowing = false
+                                }
+                            }
                     }
+
                     
                     HStack {
                         Spacer()
@@ -266,7 +300,7 @@ struct TreasureHuntView: View {
                             }
                         
                         VStack{
-                            Spacer()
+                            
                             HStack{
                                 Spacer()
                                 Button(action: {
@@ -288,8 +322,6 @@ struct TreasureHuntView: View {
                                 
                             }
                         }
-                            
-                        
                         
                         VStack {
                             Spacer()
