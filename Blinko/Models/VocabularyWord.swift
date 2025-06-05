@@ -19,7 +19,7 @@ struct VocabularyWord: Identifiable, Codable, Hashable {
 
 
 
-var level1_data = Level(title: "level1", words: [
+var level1_data = Level(id: UUID(uuidString: "b731aec2-af9a-45d1-bd39-22b898c23ff2")!, title: "level1", words: [
     VocabularyWord(baseWord: "pencil", imageName: "pencil", translations: [
         "en": "pencil", "es": "lápiz", "it": "matita", "pt": "lápis", "ja": "えんぴつ"
     ]),
@@ -35,7 +35,7 @@ var level1_data = Level(title: "level1", words: [
 ])
 
 
-var level2_data = Level(title: "level2", words: [
+var level2_data = Level(id: UUID(uuidString:"5f948f7c-3510-4234-a53c-870161517859")!,title: "level2", words: [
     VocabularyWord(baseWord: "pen", imageName: "pen", translations: [
         "en": "pen", "es": "pluma", "it": "penna", "pt": "caneta", "ja": "ペン"
     ]),
@@ -51,7 +51,7 @@ var level2_data = Level(title: "level2", words: [
 ])
 
 
-var level3_data = Level(title: "level3", words: [
+var level3_data = Level(id: UUID(uuidString: "4db58b6f-669b-43a6-9dd4-bfa52e28437d")!,title: "level3", words: [
     VocabularyWord(baseWord: "apple", imageName: "apple", translations: [
         "en": "apple", "es": "manzana", "it": "mela", "pt": "maçã", "ja": "りんご"
     ]),
@@ -67,7 +67,7 @@ var level3_data = Level(title: "level3", words: [
 ])
 
 
-var level4_data = Level(title: "level4", words: [
+var level4_data = Level(id: UUID(uuidString: "7966ab55-89ed-4a1e-9f45-d1dea72b9ca2")!, title: "level4", words: [
     VocabularyWord(baseWord: "lemon", imageName: "lemon", translations: [
         "en": "lemon", "es": "limón", "it": "limone", "pt": "limão", "ja": "レモン"
     ]),
@@ -84,7 +84,7 @@ var level4_data = Level(title: "level4", words: [
 
 
 
-var level5_data = Level(title: "level5", words: [
+var level5_data = Level(id: UUID(uuidString: "65241189-dd37-474e-abe9-15e44ae431b6")!, title: "level5", words: [
     VocabularyWord(baseWord: "backpack", imageName: "backpack", translations: [
         "en": "backpack", "es": "mochila", "it": "zaino", "pt": "mochila", "ja": "リュックサック"
     ]),

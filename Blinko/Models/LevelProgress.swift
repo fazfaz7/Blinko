@@ -37,6 +37,10 @@ class UserProgress: ObservableObject {
     // Stores the progress for each level, using the level's UUID as the key.
     @Published var levelsProgress: [UUID: LevelProgress] = [:]
     
+    init() {
+            load()
+        }
+    
     // Checks if a level is unlocked
     func isLevelUnlocked(levelIndex: Int, levels: [Level]) -> Bool {
         // The first level is always unlocked.

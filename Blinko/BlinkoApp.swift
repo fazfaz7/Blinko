@@ -17,6 +17,9 @@ struct BlinkoApp: App {
             //SelectLevel(userProgress: UserProgress())
             LevelSelectionView()
                 .environmentObject(userProgress)
+                .onAppear {
+                                userProgress.load()
+                            }
                 
         }
     }
