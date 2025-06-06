@@ -189,11 +189,15 @@ struct ChooseMinigameView: View {
                             onClose()
                         }
                     } label: {
-                        Image(systemName: "xmark")
-                            .padding(20)
-                            .foregroundColor(.white)
-                            .background(Circle().fill(.gray.opacity(0.8)))
-                    }
+                        ZStack {
+                            Circle()
+                                .fill(.red.opacity(0.8))
+                                .frame(width: 70, height: 70)
+                            Image(systemName: "xmark")
+                                .font(.system(size: 40, weight: .black))
+                                .foregroundColor(.white.opacity(0.9))
+                        }
+                    }.padding(25)
                 }
                 Spacer()
             }

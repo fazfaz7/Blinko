@@ -67,16 +67,21 @@ struct InvertedTHView: View {
                 // If all the objects have been scanned, the scanner disappears. It starts glowing if it sees ONLY the current object.
                 // Also, it disappears whenever a big card is on the screen.
                 if currentIndex < levelObjects.count && !showObjectFound && !showObject {
-                    Image("ScannerImage")
+                    Image(viewModel.detectedObject.lowercased()
+                          == levelObjects[currentIndex].baseWord
+                              ? "ScannerYellow" : "ScannerBlue")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 700)
+                        .frame(width: 600)
                         .shadow(
                             color: viewModel.detectedObject.lowercased()
                             == levelObjects[currentIndex].baseWord
-                                ? .yellow : .clear, radius: 40)
+                            ? .yellow.opacity(0.9) : .clear,
+                            radius: viewModel.detectedObject.lowercased()
+                            == levelObjects[currentIndex].baseWord ? 30 : 0)
                 }
             }
+            
 
             // If showObject is now true, then the cards and the camera button disappear.
             if !showObjectFound && !showObject{
@@ -305,7 +310,27 @@ struct InvertedTHView: View {
                  
             }
             
-
+            // X button
+            VStack {
+                HStack {
+                    Spacer()
+                    Button {
+                        viewModel.cameraManager.stopSession()
+                        onNext()
+                    } label: {
+                        ZStack {
+                            Circle()
+                                .fill(.red.opacity(0.8))
+                                .frame(width: 70, height: 70)
+                            Image(systemName: "xmark")
+                                .font(.system(size: 40, weight: .black))
+                                .foregroundColor(.white.opacity(0.9))
+                        }
+                    }.padding(25)
+                }
+                Spacer()
+            }
+            
         }.ignoresSafeArea()
             .onTapGesture {
                 

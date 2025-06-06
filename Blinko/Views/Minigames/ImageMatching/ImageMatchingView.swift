@@ -164,6 +164,27 @@ struct ImageMatchingView: View {
                 }
                 .ignoresSafeArea()
                 
+                // X button
+                VStack {
+                    HStack {
+                        Spacer()
+                        Button {
+                            onNext()
+                        } label: {
+                            ZStack {
+                                Circle()
+                                    .fill(.red.opacity(0.8))
+                                    .frame(width: 70, height: 70)
+                                Image(systemName: "xmark")
+                                    .font(.system(size: 40, weight: .black))
+                                    .foregroundColor(.white.opacity(0.9))
+                            }
+                        }.padding(25)
+                            .padding(.top, 180)
+                    }
+                    Spacer()
+                }
+
                 
                 
                 
