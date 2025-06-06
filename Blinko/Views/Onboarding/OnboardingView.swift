@@ -66,6 +66,7 @@ struct OnboardingView: View {
                             .padding(.horizontal, 40)
                             .padding(.vertical, 20)
                         )
+                        .tag(0)
                     
                     
                     RoundedRectangle(cornerRadius: 50)
@@ -112,6 +113,7 @@ struct OnboardingView: View {
                             .padding(.horizontal, 40)
                             .padding(.vertical, 20)
                         )
+                        .tag(1)
                     
                     
                     RoundedRectangle(cornerRadius: 50)
@@ -142,6 +144,7 @@ struct OnboardingView: View {
                             .padding(.horizontal, 40)
                             .padding(.vertical, 20)
                         )
+                        .tag(2)
                     
                     
                     RoundedRectangle(cornerRadius: 50)
@@ -182,6 +185,7 @@ struct OnboardingView: View {
                             .padding(.horizontal, 40)
                             .padding(.vertical, 20)
                         )
+                        .tag(3)
                     
                     RoundedRectangle(cornerRadius: 50)
                         .fill(.lightYellow)
@@ -212,6 +216,7 @@ struct OnboardingView: View {
                             .padding(.horizontal, 40)
                             .padding(.vertical, 20)
                         )
+                        .tag(4)
                     
                     RoundedRectangle(cornerRadius: 50)
                         .fill(.lightYellow)
@@ -283,6 +288,7 @@ struct OnboardingView: View {
                             .padding(.horizontal, 40)
                             .padding(.vertical, 20)
                         )
+                        .tag(5)
                     
 
                    
